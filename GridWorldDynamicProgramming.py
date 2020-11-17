@@ -38,7 +38,7 @@ starting_state = np.array([[0, 0]])
 eps = 1e-4
 
 ########################################################################################################################
-# Policy Evaluation
+# Policy Iteration: Policy Evaluation & Policy Improvement
 ########################################################################################################################
 
 
@@ -81,6 +81,14 @@ class My10x10GridWorld:
         else:
             print(f"Action {a} is not a feasible input ('n', 'w', 's', 'e').")
 
+    @staticmethod
+    def isIn(possible_elem_of_set, set):
+        return next((True for elem in set if np.array_equal(elem, possible_elem_of_set)), False)
+
+    @staticmethod
+    def countCharsInString(string):
+        return len(string.replace(" ", ""))
+
     def isOutOfGridOrAtWall(self, current_state):
         """Check if current_state is out of the GridWorld or in a wall."""
         return (not ((0 <= current_state[0] <= self.NROWS - 1) and (0 <= current_state[1] <= self.NCOLS - 1))) or \
@@ -97,14 +105,6 @@ class My10x10GridWorld:
     def isTerminalState(self, s):
         return self.isIn(s, self.terminal_states)
 
-    @staticmethod
-    def isIn(possible_elem_of_set, set):
-        return next((True for elem in set if np.array_equal(elem, possible_elem_of_set)), False)
-    
-    @staticmethod
-    def countCharsInString(string):
-        return len(string.replace(" ", ""))
-
     def policyEvaluation(self, vOld):
         """Iterative Policy Evaluation: Do one update of the value function of Iterative Policy Evaluation"""
         vNew = np.zeros((self.NROWS, self.NCOLS))
@@ -116,7 +116,7 @@ class My10x10GridWorld:
                 if self.isTerminalState([row, col]):
                     vNew[row, col] = self.getRewardForAction([row, col])
                     continue
-                    
+
                 if self.isOutOfGridOrAtWall([row, col]):
                     vNew[row, col] = np.inf
                     continue
@@ -153,23 +153,6 @@ class My10x10GridWorld:
                     vNew[row, col] += vUpdate
 
         return np.round(vNew, 2)
-
-    def runPolicyEvaluation(self, whenToPrint, iter):
-        """Does Policy Evaluation"""
-        vOld = self.v.copy()
-        print(f"-- k=0\n{vOld}")
-
-        for k in range(1, iter):
-            vNew = self.policyEvaluation(vOld);
-            if k in whenToPrint:
-                print(f"-- k={k}\n{vNew}")
-
-            # check for convergence via stopping criterion
-            #if np.abs(np.sum(vNew - vOld)) < eps:
-            #    print(f"Policy Evaluation converged after k={k} iteration using eps={eps}.")
-            #    break
-
-            vOld = vNew.copy()
 
     def policyImprovement(self, vk):
         """Greedy Policy Improvement: Update Policy greedily for each value function at time-step k"""
@@ -208,9 +191,25 @@ class My10x10GridWorld:
 
         return piUpdate
 
+    def runPolicyEvaluation(self, whenToPrint, iter):
+        """Does Policy Evaluation"""
+        vOld = self.v.copy()
+        print(f"-- k=0\n{vOld}")
+
+        for k in range(1, iter):
+            vNew = self.policyEvaluation(vOld);
+            if k in whenToPrint:
+                print(f"-- k={k}\n{vNew}")
+
+            # check for convergence via stopping criterion
+            #if np.abs(np.sum(vNew - vOld)) < eps:
+            #    print(f"Policy Evaluation converged after k={k} iteration using eps={eps}.")
+            #    break
+
+            vOld = vNew.copy()
+
     def runPolicyImprovement(self, whenToPrint, iter):
         """Does Policy Improvememt = Greedy Policy Improvement"""
-        # initial random Policy
         pi0 = np.full([NROWS, NCOLS], "nwse")
         vOld = self.v.copy()
         print(f"-- k=0\n{pi0}")
@@ -246,8 +245,15 @@ GridWorld = My10x10GridWorld([NROWS, NCOLS], starting_state, terminal_states, A,
                              Gamma, v, pi, piProbs, eps)
 
 whenToPrint = np.array([1, 2, 3, 4, 5, 10, 100])
+noOfIters = 4
 
-#GridWorld.runPolicyEvaluation(whenToPrint, 6)
-#GridWorld.runPolicyImprovement(whenToPrint, 2)
-GridWorld.runPolicyIteration(whenToPrint, 4)
+whatToDo = input("Press 1 for Policy Evaluation:\n"
+                 "Press 2 for Policy Improvement:\n"
+                 "Press 3 for Policy Iteration:")
 
+if whatToDo == "1":
+    GridWorld.runPolicyEvaluation(whenToPrint, noOfIters)
+elif whatToDo == "2":
+    GridWorld.runPolicyImprovement(whenToPrint, noOfIters)
+elif whatToDo == "3":
+    GridWorld.runPolicyIteration(whenToPrint, noOfIters)
