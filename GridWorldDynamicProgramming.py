@@ -13,7 +13,7 @@ pi = {A[0]: .25, A[1]: .25, A[2]: .25, A[3]: .25}
 
 # Rewards
 rewards = {"pos": 1, "neg": -1}
-neg_reward_states = np.array([[3, 3], [4, 6], [4, 7], [5, 7], [5, 9], [6, 9], [7, 3], [7, 5], [7, 6]])
+neg_reward_states = np.array([[3, 3], [4, 5], [4, 6], [5, 6], [5, 8], [6, 8], [7, 3], [7, 5], [7, 6]])
 pos_reward_states = np.array([[5, 5]])
 
 # Walls
@@ -79,12 +79,12 @@ class My10x10GridWorld:
     def isOutOfGridOrAtWall(self, current_state):
         """Check if current_state is out of the GridWorld or in a wall."""
         return (not ((0 <= current_state[0] <= self.NROWS - 1) and (0 <= current_state[1] <= self.NCOLS - 1))) or \
-               self.isIn(self.walls, current_state)
+               self.isIn(current_state, self.walls)
 
     def getRewardForAction(self, next_state):
-        if next_state in self.neg_reward_states:
+        if self.isIn(next_state, self.neg_reward_states):
             return self.rewards['neg']
-        elif next_state in self.pos_reward_states:
+        elif self.isIn(next_state, self.pos_reward_states):
             return self.rewards['pos']
         else:
             return 0
@@ -96,7 +96,7 @@ class My10x10GridWorld:
     def isIn(possible_elem_of_set, set):
         return next((True for elem in set if np.array_equal(elem, possible_elem_of_set)), False)
 
-    def iterativePolicyEvaluation(self, pi, R, vOld):
+    def iterativePolicyEvaluation(self, vOld):
         """Iterative Policy Evaluation: Do one update of the value function of Iterative Policy Evaluation"""
         vNew = np.zeros((self.NROWS, self.NCOLS))
 
@@ -106,16 +106,25 @@ class My10x10GridWorld:
 
                 if self.isTerminalState([row, col]):
                     continue
+                    
+                if self.isOutOfGridOrAtWall([row, col]):
+                    vNew[row, col] = np.inf
+                    continue
+
+                if self.isIn([row, col], self.terminal_states):
+                    vNew[row, col] = self.getRewardForAction([row, col])
+                    continue
 
                 # sum over all actions
                 for a in A:
-                    pi_a_given_s = pi[a]
+                    pi_a_given_s = self.pi[a]
 
                     # get indice of the state after taking the action a
                     i_after_Action = self.getIndiceAfterAction([row, col], a)
 
                     # Reward from current state s taking Action a
-                    R_s_a = self.getRewardForAction()
+                    # Note: same reward for all actions from state s
+                    R_s_a = self.getRewardForAction([row, col])
 
                     # Get vOld of successor state
                     vOldSuccessor = vOld[row, col] if self.isOutOfGridOrAtWall([i_after_Action[0], i_after_Action[1]]) \
@@ -132,19 +141,20 @@ class My10x10GridWorld:
 
         return np.round(vNew, 2)
 
-    def playWithPolicyEvaluation(self, whenToPrint):
+    def playWithPolicyEvaluation(self, whenToPrint, iter):
         """Does Policy Evaluation"""
-        vOld = v.copy()
+        vOld = self.v.copy()
         print(f"-- k=0\n{vOld}")
 
-        for k in range(1, 1001):
-            vNew = self.iterativePolicyEvaluation(self.pi, self.R, vOld);
-            if k in whenToPrint: print(f"-- k={k}\n{vNew}")
+        for k in range(1, iter):
+            vNew = self.iterativePolicyEvaluation(vOld);
+            if k in whenToPrint:
+                print(f"-- k={k}\n{vNew}")
 
             # check for convergence via stopping criterion
-            if np.abs(np.sum(vNew - vOld)) < eps:
-                print(f"Policy Evaluation converged after k={k} iteration using eps={eps}.")
-                break
+            #if np.abs(np.sum(vNew - vOld)) < eps:
+            #    print(f"Policy Evaluation converged after k={k} iteration using eps={eps}.")
+            #    break
 
             vOld = vNew.copy()
 
@@ -200,14 +210,6 @@ class My10x10GridWorld:
 GridWorld = My10x10GridWorld([NROWS, NCOLS], starting_state, terminal_states, A,
                              rewards, neg_reward_states, pos_reward_states, Walls, Gamma, v, pi, eps)
 
-counter = 0
-print(GridWorld.walls)
-for row in range(GridWorld.NROWS):
-    for col in range(GridWorld.NCOLS):
-        if GridWorld.isIn([row, col], GridWorld.walls):
-            GridWorld.v[row, col] = 1
-print(GridWorld.v)
+whenToPrint = np.array([1, 2, 3, 4, 5, 10, 100])
 
-
-
-
+GridWorld.playWithPolicyEvaluation(whenToPrint, 6)

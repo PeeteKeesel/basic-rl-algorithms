@@ -15,10 +15,10 @@
     <session id="-1196685926">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
+          <entry key="project.closed" value="2" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="2" />
+          <entry key="project.open.time.7" value="2" />
+          <entry key="project.opened" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -33,12 +33,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="2215" />
+          <entry key="py" value="2866" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="2215" />
+          <entry key="Python" value="2866" />
         </counts>
       </usages-collector>
     </session>
@@ -48,18 +48,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GridWorldDynamicProgramming.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="24" column="11" lean-forward="true" selection-start-line="24" selection-start-column="11" selection-end-line="24" selection-end-column="11" />
+            <state relative-caret-position="838">
+              <caret line="215" lean-forward="true" selection-start-line="215" selection-end-line="215" />
               <folding>
                 <element signature="e#1306#1774#0" />
                 <element signature="e#1850#2310#0" />
-                <element signature="e#2370#2604#0" />
-                <element signature="e#2660#2864#0" />
+                <element signature="e#2370#2634#0" />
                 <element signature="e#2908#2949#0" />
                 <element signature="e#3018#3106#0" />
-                <element signature="e#4691#5201#0" />
                 <element signature="e#5251#6563#0" />
-                <marker date="1605540670771" expanded="true" signature="3009:3112" ph="..." />
+                <element signature="e#6627#7093#0" />
+                <marker date="1605601472544" expanded="true" signature="3027:3130" ph="..." />
               </folding>
             </state>
           </provider>
@@ -78,6 +77,7 @@
     <findStrings>
       <find>Rewards[&quot;neg&quot;]</find>
       <find>getRewardForAction</find>
+      <find>print</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -203,7 +203,7 @@
     <frame x="1681" y="-888" width="1720" height="1415" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17759237" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1090584" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -213,7 +213,7 @@
       <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="5" />
       <window_info anchor="bottom" id="Version Control" order="6" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.24905087" />
+      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.24905087" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5007553" side_tool="true" weight="0.24919094" />
       <window_info anchor="bottom" id="Python Console" order="9" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -221,7 +221,7 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="R Graphics" order="3" />
       <window_info anchor="right" id="R Packages" order="4" />
-      <window_info active="true" anchor="right" id="Run" order="5" sideWeight="0.49924472" visible="true" weight="0.29856974" />
+      <window_info active="true" anchor="right" id="Run" order="5" sideWeight="0.49924472" visible="true" weight="0.34266984" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -230,18 +230,17 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/GridWorldDynamicProgramming.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="11" lean-forward="true" selection-start-line="24" selection-start-column="11" selection-end-line="24" selection-end-column="11" />
+        <state relative-caret-position="838">
+          <caret line="215" lean-forward="true" selection-start-line="215" selection-end-line="215" />
           <folding>
             <element signature="e#1306#1774#0" />
             <element signature="e#1850#2310#0" />
-            <element signature="e#2370#2604#0" />
-            <element signature="e#2660#2864#0" />
+            <element signature="e#2370#2634#0" />
             <element signature="e#2908#2949#0" />
             <element signature="e#3018#3106#0" />
-            <element signature="e#4691#5201#0" />
             <element signature="e#5251#6563#0" />
-            <marker date="1605540670771" expanded="true" signature="3009:3112" ph="..." />
+            <element signature="e#6627#7093#0" />
+            <marker date="1605601472544" expanded="true" signature="3027:3130" ph="..." />
           </folding>
         </state>
       </provider>
