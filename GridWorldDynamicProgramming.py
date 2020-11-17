@@ -191,6 +191,49 @@ class My10x10GridWorld:
 
         return piUpdate
 
+    def valueIteration(self, vOld):
+        """Does Value Iteration: Find optimal Policy + then update policy"""
+        vNew = np.zeros((self.NROWS, self.NCOLS))
+
+        # following a random policy we update the value function
+        for row in range(self.NROWS):
+            for col in range(self.NCOLS):
+
+                if self.isTerminalState([row, col]):
+                    vNew[row, col] = self.getRewardForAction([row, col])
+                    continue
+
+                if self.isOutOfGridOrAtWall([row, col]):
+                    vNew[row, col] = np.inf
+                    continue
+
+                # save the value of the Bellmann eq. for each action to then take the max of it
+                tempBellmannEqValues = np.array([])
+
+                # iterate over all actions
+                for a in A:
+
+                    # get indice of the state after taking the action a
+                    i_after_Action = self.getIndiceAfterAction([row, col], a)
+
+                    # Reward from current state s taking Action a
+                    # Note: same reward for all actions from state s
+                    R_s_a = self.getRewardForAction([row, col])
+
+                    # Get vOld of successor state
+                    vOldSuccessor = vOld[row, col] if self.isOutOfGridOrAtWall([i_after_Action[0], i_after_Action[1]]) \
+                        else vOld[i_after_Action[0], i_after_Action[1]]
+
+                    # sum over all successor states - NOTE: here only 1 successor state and prob is 1 to
+                    # transfer from current state to that state taking action a
+                    vUpdate = R_s_a + Gamma * 1 * vOldSuccessor
+                    tempBellmannEqValues = np.append(tempBellmannEqValues, vUpdate)
+
+                # fill in the value of the action with the maximal value
+                vNew[row, col] = np.max(tempBellmannEqValues)
+
+        return np.round(vNew, 2)
+
     def runPolicyEvaluation(self, whenToPrint, iter):
         """Does Policy Evaluation"""
         vOld = self.v.copy()
@@ -238,6 +281,22 @@ class My10x10GridWorld:
 
             vOld = vNew.copy()
 
+    def runValueIteration(self, whenToPrint, iter):
+        vOld = self.v.copy()
+        print(f"-- k=0\n{vOld}")
+
+        for k in range(1, iter + 1):
+            vNew = self.valueIteration(vOld)
+            if k in whenToPrint:
+                print(f"-- k={k}\n{vNew}")
+
+            # check for convergence via stopping criterion
+            #if np.abs(np.sum(vNew - vOld)) < eps:
+            #    print(f"Policy Evaluation converged after k={k} iteration using eps={eps}.")
+            #    break
+
+            vOld = vNew.copy()
+
 
 ########################################################################################################################
 GridWorld = My10x10GridWorld([NROWS, NCOLS], starting_state, terminal_states, A,
@@ -248,8 +307,9 @@ whenToPrint = np.array([1, 2, 3, 4, 5, 10, 100])
 noOfIters = 4
 
 whatToDo = input("Press 1 for Policy Evaluation:\n"
-                 "Press 2 for Policy Improvement:\n"
-                 "Press 3 for Policy Iteration:")
+                 "      2 for Policy Improvement:\n"
+                 "      3 for Policy Iteration:\n"
+                 "      4 for Value Iteration: ")
 
 if whatToDo == "1":
     GridWorld.runPolicyEvaluation(whenToPrint, noOfIters)
@@ -257,3 +317,5 @@ elif whatToDo == "2":
     GridWorld.runPolicyImprovement(whenToPrint, noOfIters)
 elif whatToDo == "3":
     GridWorld.runPolicyIteration(whenToPrint, noOfIters)
+elif whatToDo == "4":
+    GridWorld.runValueIteration(whenToPrint, noOfIters)
