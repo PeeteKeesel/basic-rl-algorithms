@@ -9,7 +9,7 @@ import numpy as np
 A = ["n", "w", "s", "e"]
 
 # Policy = random uniform
-pi = {A[0]: .25, A[1]: .25, A[2]: .25, A[3]: .25}
+piProbs = {A[0]: .25, A[1]: .25, A[2]: .25, A[3]: .25}
 
 # Rewards
 rewards = {"pos": 1, "neg": -1}
@@ -24,10 +24,13 @@ Walls = np.array([[2, 1], [2, 2], [2, 3], [2, 4],
 # Undiscounted episodic MDP
 Gamma = 0.9
 
-# Value Function
-v = np.zeros((10, 10))
+# Grid dimension
+NROWS, NCOLS = 10, 10
 
-NROWS, NCOLS = v.shape[0], v.shape[1]
+# Value Function
+v = np.zeros((NROWS, NCOLS))
+pi = np.full([NROWS, NCOLS], "nwse")
+
 terminal_states = np.array([[5, 5]])
 starting_state = np.array([[0, 0]])
 
@@ -42,7 +45,8 @@ eps = 1e-4
 class My10x10GridWorld:
 
     def __init__(self, shape, starting_state, terminal_states, A,
-                 rewards, neg_reward_states, pos_reward_states, Walls, Gamma, v, pi, eps):
+                 rewards, neg_reward_states, pos_reward_states, Walls,
+                 Gamma, v, pi, piProbs, eps):
         self.NROWS = shape[0]
         self.NCOLS = shape[1]
         self.v = np.zeros((self.NROWS, self.NCOLS))
@@ -59,6 +63,7 @@ class My10x10GridWorld:
 
         self.v = v
         self.pi = pi
+        self.piProbs = piProbs
 
         self.eps = eps
 
@@ -95,6 +100,10 @@ class My10x10GridWorld:
     @staticmethod
     def isIn(possible_elem_of_set, set):
         return next((True for elem in set if np.array_equal(elem, possible_elem_of_set)), False)
+    
+    @staticmethod
+    def countCharsInString(string):
+        return len(string.replace(" ", ""))
 
     def policyEvaluation(self, vOld):
         """Iterative Policy Evaluation: Do one update of the value function of Iterative Policy Evaluation"""
@@ -112,9 +121,18 @@ class My10x10GridWorld:
                     vNew[row, col] = np.inf
                     continue
 
+                current_policy_directions = self.pi[row, col]
+                count_of_directions = self.countCharsInString(current_policy_directions)
+
                 # sum over all actions
                 for a in A:
-                    pi_a_given_s = self.pi[a]
+
+                    # get the probabilities depending on the current policy
+                    # Ex: if "nse" the prob. would be 1/3
+                    if a not in current_policy_directions:
+                        continue
+                    else:
+                        pi_a_given_s = 1 / count_of_directions
 
                     # get indice of the state after taking the action a
                     i_after_Action = self.getIndiceAfterAction([row, col], a)
@@ -130,8 +148,6 @@ class My10x10GridWorld:
                     # sum over all successor states - NOTE: here only 1 successor state and prob is 1 to
                     # transfer from current state to that state taking action a
                     vUpdate = pi_a_given_s * (R_s_a + Gamma * 1 * vOldSuccessor)
-
-                    # print(f"   a={a}  vUpdate={vUpdate}")
 
                     # fill in the new value
                     vNew[row, col] += vUpdate
@@ -193,7 +209,7 @@ class My10x10GridWorld:
         return piUpdate
 
     def runPolicyImprovement(self, whenToPrint, iter):
-        """Does Policy Iteration = Policy Evaluation + Greedy Policy Improvement"""
+        """Does Policy Improvememt = Greedy Policy Improvement"""
         # initial random Policy
         pi0 = np.full([NROWS, NCOLS], "nwse")
         vOld = self.v.copy()
@@ -207,12 +223,31 @@ class My10x10GridWorld:
 
             vOld = vNew.copy()
 
+    def runPolicyIteration(self, whenToPrint, iter):
+        """Does Policy Iteration = Policy Evaluation + Greedy Policy Improvement"""
+        v = np.zeros((10, 10))
+        pi0 = np.full([NROWS, NCOLS], "nwse")
+        vOld = self.v.copy()
+        print(f"-- k=0\n{self.v}\n{pi0}")
+
+        for k in range(1, iter + 1):
+            vNew = self.policyEvaluation(vOld)
+            self.v = vNew
+            self.pi = self.policyImprovement(vNew)
+            if k in whenToPrint:
+                print(f"-- k={k}\n{self.v}\n{self.pi}")
+
+            vOld = vNew.copy()
+
 
 ########################################################################################################################
 GridWorld = My10x10GridWorld([NROWS, NCOLS], starting_state, terminal_states, A,
-                             rewards, neg_reward_states, pos_reward_states, Walls, Gamma, v, pi, eps)
+                             rewards, neg_reward_states, pos_reward_states, Walls,
+                             Gamma, v, pi, piProbs, eps)
 
 whenToPrint = np.array([1, 2, 3, 4, 5, 10, 100])
 
 #GridWorld.runPolicyEvaluation(whenToPrint, 6)
 #GridWorld.runPolicyImprovement(whenToPrint, 2)
+GridWorld.runPolicyIteration(whenToPrint, 4)
+
