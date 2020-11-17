@@ -90,13 +90,13 @@ class My10x10GridWorld:
             return 0
 
     def isTerminalState(self, s):
-        return self.isIn(self.terminal_states, s)
+        return self.isIn(s, self.terminal_states)
 
     @staticmethod
     def isIn(possible_elem_of_set, set):
         return next((True for elem in set if np.array_equal(elem, possible_elem_of_set)), False)
 
-    def iterativePolicyEvaluation(self, vOld):
+    def policyEvaluation(self, vOld):
         """Iterative Policy Evaluation: Do one update of the value function of Iterative Policy Evaluation"""
         vNew = np.zeros((self.NROWS, self.NCOLS))
 
@@ -105,14 +105,11 @@ class My10x10GridWorld:
             for col in range(self.NCOLS):
 
                 if self.isTerminalState([row, col]):
+                    vNew[row, col] = self.getRewardForAction([row, col])
                     continue
                     
                 if self.isOutOfGridOrAtWall([row, col]):
                     vNew[row, col] = np.inf
-                    continue
-
-                if self.isIn([row, col], self.terminal_states):
-                    vNew[row, col] = self.getRewardForAction([row, col])
                     continue
 
                 # sum over all actions
@@ -141,13 +138,13 @@ class My10x10GridWorld:
 
         return np.round(vNew, 2)
 
-    def playWithPolicyEvaluation(self, whenToPrint, iter):
+    def runPolicyEvaluation(self, whenToPrint, iter):
         """Does Policy Evaluation"""
         vOld = self.v.copy()
         print(f"-- k=0\n{vOld}")
 
         for k in range(1, iter):
-            vNew = self.iterativePolicyEvaluation(vOld);
+            vNew = self.policyEvaluation(vOld);
             if k in whenToPrint:
                 print(f"-- k={k}\n{vNew}")
 
@@ -158,7 +155,7 @@ class My10x10GridWorld:
 
             vOld = vNew.copy()
 
-    def updatePolicyGreedily(self, vk):
+    def policyImprovement(self, vk):
         """Greedy Policy Improvement: Update Policy greedily for each value function at time-step k"""
         piUpdate = np.empty([self.NROWS, self.NCOLS], dtype="<U10")
 
@@ -167,6 +164,11 @@ class My10x10GridWorld:
             for col in range(self.NCOLS):
 
                 if self.isTerminalState([row, col]):
+                    piUpdate[row, col] = "OOOO"
+                    continue
+
+                if self.isOutOfGridOrAtWall([row, col]):
+                    piUpdate[row, col] = "XXXX"
                     continue
 
                 vSuccessors = np.zeros(len(self.A))
@@ -175,31 +177,31 @@ class My10x10GridWorld:
                     # get indice of the state after taking the action a
                     i_after_Action = self.getIndiceAfterAction([row, col], a)
 
-                    # Get vOld of successor state
-                    vOldSuccessor = vk[row, col] if self.isOutOfGridOrAtWall([i_after_Action[0], i_after_Action[1]]) \
+                    # Get value of successor state
+                    vSuccessor = vk[row, col] if self.isOutOfGridOrAtWall([i_after_Action[0], i_after_Action[1]]) \
                         else vk[i_after_Action[0], i_after_Action[1]]
 
-                    vSuccessors[i] = vOldSuccessor
+                    vSuccessors[i] = vSuccessor
 
                 # find the indice(s) of the maximal successor values
                 maxIndices = [ind for ind, vSuccessor in enumerate(vSuccessors) if vSuccessor == max(vSuccessors)]
                 # get the corresponding direction
                 directions = [A[ind] for ind in maxIndices]
 
-                piUpdate[row, col] = "".join(directions)
+                piUpdate[row, col] = "{:<4}".format("".join(directions))
 
         return piUpdate
 
-    def playWithPolicyImprovement(self, whenToPrint):
+    def runPolicyImprovement(self, whenToPrint, iter):
         """Does Policy Iteration = Policy Evaluation + Greedy Policy Improvement"""
         # initial random Policy
         pi0 = np.full([NROWS, NCOLS], "nwse")
-        vOld = v.copy()
+        vOld = self.v.copy()
         print(f"-- k=0\n{pi0}")
 
-        for k in range(1, 101):
-            vNew = self.iterativePolicyEvaluation(pi, R, vOld)
-            piNew = self.updatePolicyGreedily(vNew)
+        for k in range(1, iter):
+            vNew = self.policyEvaluation(vOld)
+            piNew = self.policyImprovement(vNew)
             if k in whenToPrint:
                 print(f"-- k={k}\n{piNew}")
 
@@ -212,4 +214,5 @@ GridWorld = My10x10GridWorld([NROWS, NCOLS], starting_state, terminal_states, A,
 
 whenToPrint = np.array([1, 2, 3, 4, 5, 10, 100])
 
-GridWorld.playWithPolicyEvaluation(whenToPrint, 6)
+#GridWorld.runPolicyEvaluation(whenToPrint, 6)
+#GridWorld.runPolicyImprovement(whenToPrint, 2)
