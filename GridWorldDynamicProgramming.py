@@ -1,5 +1,5 @@
 """
-Rewrite the GridWorld: DP example from https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_dp.html
+Rewrite the 'GridWorld: DP' example from https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_dp.html
 """
 
 import numpy as np
@@ -240,7 +240,7 @@ class My10x10GridWorld:
         print(f"-- k=0\n{vOld}")
 
         for k in range(1, iter):
-            vNew = self.policyEvaluation(vOld);
+            vNew = self.policyEvaluation(vOld)
             if k in whenToPrint:
                 print(f"-- k={k}\n{vNew}")
 

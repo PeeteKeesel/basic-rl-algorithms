@@ -2,7 +2,18 @@
 
 Rewriting the code from [.../reinforcejs/gridworld_dp.html](https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_dp.html). 
 
-#### Dynamic Programming: Implement Policy Iteration and Value Iteration.
+Implement
+
+- [x] Policy Iteration
+- [x] Value Iteration 
+- [ ] (Monte Carlo)
+- [ ] TD-0
+- [ ] TD(lambda) 
+- [ ] SARSA
+
+### 1. Dynamic Programming: Implement Policy Iteration and Value Iteration.
+
+Implementing code for the simulations on [GridWorld: DP](https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_dp.html)
 
 __Policy Iteration__: 
 Iteratively doing 
@@ -29,3 +40,9 @@ and then using that improvement policy in the next evaluation step leads to the 
 value function for each iteration as in value iteration. I.e. Directly updating the policy 
 and then evaluation leads to the same as always only taking the action which leads to
 the successor state with maximal value.
+
+
+### 2. Temporal Difference Learning
+
+Implementing code for the simulations on [GridWorld: TD](https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_td.html)
+
