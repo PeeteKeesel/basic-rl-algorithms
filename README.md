@@ -46,3 +46,13 @@ the successor state with maximal value.
 
 Implementing code for the simulations on [GridWorld: TD](https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_td.html)
 
+__TD(0)__
+
+- start in a start state
+- update current state using a 1-step-lookahead
+- continue value estmation with the state you
+ended up after the 1-step-lookahead
+- directly update the policy = online
+- continue procedure until final state 
+or specifid number of iterations is reached
+- go back to start state and continue 

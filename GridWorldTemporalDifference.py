@@ -86,7 +86,7 @@ class My10x10GridWorld:
         if a == "e":
             return [current_state[0],     current_state[1] + 1]
         else:
-            print(f"Action {a} is not a feasible input ('n', 'w', 's', 'e').")
+            print(f"Action {a} from state {current_state} is not a feasible input ('n', 'w', 's', 'e').")
 
     @staticmethod
     def isIn(possible_elem_of_set, set):
@@ -112,20 +112,17 @@ class My10x10GridWorld:
     def isTerminalState(self, s):
         return self.isIn(s, self.terminal_states)
 
-    def policyImprovement(self, vk):
+    def policyImprovement(self):
         """Greedy Policy Improvement: Update Policy greedily for each value function at time-step k"""
-        piUpdate = np.empty([self.NROWS, self.NCOLS], dtype="<U10")
-
-        # following a random policy we update the value function
         for row in range(self.NROWS):
             for col in range(self.NCOLS):
 
-                if self.isTerminalState([row, col]):
-                    piUpdate[row, col] = "OOOO"
-                    continue
+                #if self.isTerminalState([row, col]):
+                #    self.pi[row, col] = "OOOO"
+                #    continue
 
                 if self.isOutOfGridOrAtWall([row, col]):
-                    piUpdate[row, col] = "XXXX"
+                    self.pi[row, col] = "XXXX"
                     continue
 
                 vSuccessors = np.zeros(len(self.A)) + np.NINF
@@ -138,8 +135,8 @@ class My10x10GridWorld:
                         continue
 
                     # Get value of successor state
-                    vSuccessor = vk[row, col] if self.isOutOfGridOrAtWall([i_after_Action[0], i_after_Action[1]]) \
-                        else vk[i_after_Action[0], i_after_Action[1]]
+                    vSuccessor = self.v[row, col] if self.isOutOfGridOrAtWall([i_after_Action[0], i_after_Action[1]]) \
+                        else self.v[i_after_Action[0], i_after_Action[1]]
 
                     vSuccessors[i] = vSuccessor
 
@@ -148,11 +145,9 @@ class My10x10GridWorld:
                 # get the corresponding direction
                 directions = [A[ind] for ind in maxIndices]
 
-                piUpdate[row, col] = "{:<4}".format("".join(directions))
+                self.pi[row, col] = "{:<4}".format("".join(directions))
 
-        return piUpdate
-
-    def get1StepTdTargetForState(self, state, vOld):
+    def get1StepTdTargetForState(self, state):
         """Do 1-step lookahead by taking a random action"""
 
         # sample from std normal
@@ -166,23 +161,23 @@ class My10x10GridWorld:
 
             # take random action if multiple are in the current policy
             if len(current_pi_actions_for_state) > 1:
-                random_action = np.random.choice(current_pi_actions_for_state, size=1)
+                random_action = np.random.choice(current_pi_actions_for_state, size=1)[0]
                 state_after_action = self.getIndiceAfterAction(state, random_action)
 
             # otherwise just take the action from the policy
             elif len(current_pi_actions_for_state) == 1:
-                state_after_action = self.getIndiceAfterAction(state, current_pi_actions_for_state)
+                state_after_action = self.getIndiceAfterAction(state, current_pi_actions_for_state[0])
             else:
                 print(f"ERROR: the length {len(current_pi_actions_for_state)} is wrong.")
-                return np.NINF
+                return "Error", np.NINF
 
             # reward for leaving the current state
             reward = self.getRewardForAction(state)
 
             if self.isOutOfGridOrAtWall(state_after_action):
-                return reward + self.Gamma * vOld[state[0], state[1]]
+                return state_after_action, reward + self.Gamma * self.v[state[0], state[1]]
             else:
-                return reward + self.Gamma * vOld[state_after_action[0], state_after_action[1]]
+                return state_after_action, reward + self.Gamma * self.v[state_after_action[0], state_after_action[1]]
 
         # epsilon-greedy step: take random action with prob eps
         else:
@@ -191,9 +186,9 @@ class My10x10GridWorld:
             reward = self.getRewardForAction(state)
 
             if self.isOutOfGridOrAtWall(state_after_action):
-                return reward + self.Gamma * vOld[state[0], state[1]]
+                return state_after_action, reward + self.Gamma * self.v[state[0], state[1]]
             else:
-                return reward + self.Gamma * vOld[state_after_action[0], state_after_action[1]]
+                return state_after_action, reward + self.Gamma * self.v[state_after_action[0], state_after_action[1]]
 
         """OLD IDEA
         random_action = self.A[np.random.choice(np.array(range(0, len(self.A))), size=1)[0]]
@@ -206,49 +201,54 @@ class My10x10GridWorld:
             return reward + self.Gamma * vOld[state_after_action[0], state_after_action[1]]
         """
 
-    def TD0(self, vOld):
+    def TD0(self, episodes):
         """ TD(0) Backup:
             V(S_t) = V(S_t) + alpha * (R_{t+1} + gamma*V(S_{t+1}) - V(S_t))
             Look 1 step ahead
         """
-        vNew = np.zeros((self.NROWS, self.NCOLS))
+        #vNew = np.zeros((self.NROWS, self.NCOLS))
 
-        # following a random policy we update the value function
-        for row in range(self.NROWS):
-            for col in range(self.NCOLS):
+        # number of episodes = times agent goes back to start state
+        for episode in range(episodes):
 
-                # TODO: What to do when in terminal state?
-                if self.isTerminalState([row, col]):
-                    vNew[row, col] = self.getRewardForAction([row, col])
-                    continue
+            print(f"-- episode={episode}\n{self.v}\n{self.pi}")
 
-                if self.isOutOfGridOrAtWall([row, col]):
-                    vNew[row, col] = np.inf
-                    continue
+            # iterate until final state or number of
+            # maximal iterations is reacher
+            no_of_iter = 0
+            state = self.starting_state[0]
+            while True:
 
-                #current_v = self.v[row, col]
-                current_v = vOld[row, col]
+                current_value = self.v[state[0], state[1]]
+                state_after_action, tdTarget = self.get1StepTdTargetForState([state[0], state[1]])
 
-                # V(S_t) = V(S_t) + lambda * (G_t - V(S_t))
-                # with G_t = R_{t+1} + gamma*R_{t+2} + ... + gammaˆ{T-1}*R_{T}
-                current_v = current_v + self.Alpha * ( self.get1StepTdTargetForState([row, col],
-                                                                                     vOld) - current_v )
+                if self.isTerminalState(state_after_action):
+                    break
 
-                vNew[row, col] = current_v
+                self.v[state[0], state[1]] = current_value + self.Alpha * (tdTarget - current_value)
 
-        return np.round(vNew, 2)
+                # improve policy online
+                self.policyImprovement()
+
+                if no_of_iter > 1000:
+                    print(no_of_iter)
+                    break
+                elif self.isOutOfGridOrAtWall(state_after_action):
+                    no_of_iter += 1
+                else:
+                    no_of_iter += 1
+                    state = state_after_action
+
+            self.v = np.round(self.v, 2)
 
     def runTD0(self, whenToPrint, iter):
-        """Does Policy Evaluation"""
-        vOld = self.v.copy()
-        print(f"-- k=0\n{vOld}")
+        """Run TD(0)"""
+        print(f"-- k=0\n{self.v}")
 
-        for k in range(1, iter+1):
-            vNew = self.TD0(vOld)
-            if k in whenToPrint:
-                print(f"-- k={k}\n{vNew}")
-                self.pi = self.policyImprovement(vNew)
-                print(self.pi)
+        #for k in range(1, iter+1):
+        self.TD0(100)
+            #if k in whenToPrint:
+            #    print(f"-- k={k}\n{self.v}\n{self.pi}")
 
 
             # check for convergence via stopping criterion
@@ -256,13 +256,11 @@ class My10x10GridWorld:
             #    print(f"Policy Evaluation converged after k={k} iteration using eps={eps}.")
             #    break
 
-            vOld = vNew.copy()
-
 ########################################################################################################################
 GridWorld = My10x10GridWorld([NROWS, NCOLS], starting_state, terminal_states, A,
                              rewards, neg_reward_states, pos_reward_states, Walls,
                              Gamma, v, pi, piProbs, eps, Alpha, epsilon)
 
-whenToPrint = np.array([1, 2, 3, 4, 5, 10, 100, 500, 100000])
-noOfIters = 100000
+whenToPrint = np.array([1, 2, 3, 4, 5, 10, 20, 100, 500])
+noOfIters = 20
 GridWorld.runTD0(whenToPrint, noOfIters)
