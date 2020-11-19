@@ -32,7 +32,7 @@ v = np.zeros((NROWS, NCOLS))
 pi = np.full([NROWS, NCOLS], "nwse")
 
 terminal_states = np.array([[5, 5]])
-starting_state = np.array([[0, 0]])
+starting_state = np.array([0, 0])
 
 # Stopping criterion
 eps = 1e-4
@@ -42,6 +42,9 @@ Alpha = 0.1
 
 # Initial epsilon for epsilon-greedy policy
 epsilon = 0.2
+
+for wall in Walls:
+    v[wall[0], wall[1]] = np.NINF
 
 
 ########################################################################################################################
@@ -96,10 +99,10 @@ class My10x10GridWorld:
     def countCharsInString(string):
         return len(string.replace(" ", ""))
 
-    def isOutOfGridOrAtWall(self, current_state):
+    def isOutOfGridOrAtWall(self, state):
         """Check if current_state is out of the GridWorld or in a wall."""
-        return (not ((0 <= current_state[0] <= self.NROWS - 1) and (0 <= current_state[1] <= self.NCOLS - 1))) or \
-               self.isIn(current_state, self.walls)
+        return (not ((0 <= state[0] <= self.NROWS - 1) and (0 <= state[1] <= self.NCOLS - 1))) or \
+               self.isIn(state, self.walls)
 
     def getRewardForAction(self, next_state):
         if self.isIn(next_state, self.neg_reward_states):
@@ -109,8 +112,8 @@ class My10x10GridWorld:
         else:
             return 0
 
-    def isTerminalState(self, s):
-        return self.isIn(s, self.terminal_states)
+    def isTerminalState(self, state):
+        return self.isIn(state, self.terminal_states)
 
     def policyImprovement(self):
         """Greedy Policy Improvement: Update Policy greedily for each value function at time-step k"""
@@ -146,6 +149,21 @@ class My10x10GridWorld:
                 directions = [A[ind] for ind in maxIndices]
 
                 self.pi[row, col] = "{:<4}".format("".join(directions))
+
+    def get1StepTdTargetForStateNWSE(self, state):
+
+        #current_pi_actions_for_state = (self.pi[state[0], state[1]]).replace(" ", "")
+        #current_pi_actions_for_state = list(current_pi_actions_for_state)
+        #random_action = np.random.choice(current_pi_actions_for_state, size=1)[0]
+
+        random_action = self.A[np.random.choice(np.array(range(0, len(self.A))), size=1)[0]]
+        state_after_action = self.getIndiceAfterAction(state, random_action)
+        reward = self.getRewardForAction(state)
+
+        if self.isOutOfGridOrAtWall(state_after_action):
+            return state_after_action, reward + self.Gamma * self.v[state[0], state[1]]
+        else:
+            return state_after_action, reward + self.Gamma * self.v[state_after_action[0], state_after_action[1]]
 
     def get1StepTdTargetForState(self, state):
         """Do 1-step lookahead by taking a random action"""
@@ -201,52 +219,121 @@ class My10x10GridWorld:
             return reward + self.Gamma * vOld[state_after_action[0], state_after_action[1]]
         """
 
+    def getNStepReturn(self, state, n):
+        """ Returns the return obtained after randomly walking n-steps into the future.
+
+        @input
+            state: 2d-array - starting state
+            n    : int      - steps to take into the future
+        @output:
+            state: 2d-array - the state the agent ended up in after taking n random actions
+            G_t  : float    - the value of the return obtained after n steps
+        """
+        G_t = 0
+        current_state = next_state = state
+        for j in range(1, n+1):
+            G_t += self.Gamma**(j-1) * self.getRewardForAction(current_state)
+
+            if self.isTerminalState(current_state):
+                break
+
+            # take random action and set state to the state the agent ends up in
+            random_action = self.A[np.random.choice(np.array(range(0, len(self.A))), size=1)[0]]
+            next_state = self.getIndiceAfterAction(current_state, random_action)
+
+            if self.isOutOfGridOrAtWall(next_state):
+                continue
+            else:
+                current_state = next_state
+
+        G_t += self.Gamma**n * self.v[state[0], state[1]]
+        return state, G_t
+
+    def TDLambda(self, episodes, n):
+        """ V(S_t) = V(S_t) + alpha * (R_t^m - V(S_t))
+            Runs Temporal Difference learning algo where the TD target looks n steps into the future.
+
+        @input:
+            episodes: int - number of episodes the agent should run
+            n       : int - number of steps TD target looks into the future
+        """
+
+        for episode in range(episodes):
+
+            state = self.starting_state
+
+            # TODO: Use different n's and average via G_t^lambda
+
+            while True:
+
+                current_value = self.v[state[0], state[1]]
+
+                # n-step return
+                state_after_n, G_t_n = self.getNStepReturn(state, n)
+
+                # update value of current state
+                self.v[state[0], state[1]] = current_value + self.Alpha * (G_t_n - current_value)
+
+                if self.isTerminalState(state):
+                    break
+
+                state = state_after_n
+
     def TD0(self, episodes):
         """ TD(0) Backup:
             V(S_t) = V(S_t) + alpha * (R_{t+1} + gamma*V(S_{t+1}) - V(S_t))
             Look 1 step ahead
         """
         #vNew = np.zeros((self.NROWS, self.NCOLS))
+        totIters = []
 
         # number of episodes = times agent goes back to start state
         for episode in range(episodes):
 
-            print(f"-- episode={episode}\n{self.v}\n{self.pi}")
+            print(f"-- episode={episode}\n{np.round(self.v, 2)}")
 
             # iterate until final state or number of
             # maximal iterations is reacher
             no_of_iter = 0
-            state = self.starting_state[0]
+            state = self.starting_state
             while True:
 
                 current_value = self.v[state[0], state[1]]
-                state_after_action, tdTarget = self.get1StepTdTargetForState([state[0], state[1]])
-
-                if self.isTerminalState(state_after_action):
-                    break
+                next_state, tdTarget = self.get1StepTdTargetForStateNWSE([state[0], state[1]])
 
                 self.v[state[0], state[1]] = current_value + self.Alpha * (tdTarget - current_value)
 
-                # improve policy online
-                self.policyImprovement()
+                if self.isTerminalState(state):
+                    break
 
-                if no_of_iter > 1000:
+                # improve policy online
+                #self.policyImprovement()
+
+                if no_of_iter > 10000:
                     print(no_of_iter)
                     break
-                elif self.isOutOfGridOrAtWall(state_after_action):
+                elif self.isOutOfGridOrAtWall(next_state):
                     no_of_iter += 1
                 else:
                     no_of_iter += 1
-                    state = state_after_action
+                    state = next_state
 
-            self.v = np.round(self.v, 2)
+            totIters.append(no_of_iter)
+
+            #self.v = np.round(self.v, 2)
+
+        # improve policy online
+        self.policyImprovement()
+        print(f"final policy:\n{self.pi}")
+
+        print(totIters)
 
     def runTD0(self, whenToPrint, iter):
         """Run TD(0)"""
         print(f"-- k=0\n{self.v}")
 
         #for k in range(1, iter+1):
-        self.TD0(100)
+        self.TD0(1000)
             #if k in whenToPrint:
             #    print(f"-- k={k}\n{self.v}\n{self.pi}")
 
