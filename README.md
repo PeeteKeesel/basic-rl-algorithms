@@ -6,10 +6,12 @@ Implement
 
 - [x] Policy Iteration
 - [x] Value Iteration 
-- [ ] (Monte Carlo)
+- [ ] First-Visit Monte Carlo
+- [ ] Every-Visit Monte Carlo
 - [ ] TD-0
 - [ ] TD(lambda) 
 - [ ] SARSA
+- [ ] Q-Learning
 
 ### 1. Dynamic Programming: Implement Policy Iteration and Value Iteration.
 

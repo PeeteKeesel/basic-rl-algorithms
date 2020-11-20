@@ -253,7 +253,7 @@ class My10x10GridWorld:
         G_t += self.Gamma**n * self.v[state[0], state[1]]
         return state, G_t
 
-    def TDLambda(self, episodes, n):
+    def TDn(self, episodes, n):
         """ V(S_t) = V(S_t) + alpha * (R_t^m - V(S_t))
             Runs Temporal Difference learning algo where the TD target looks n steps into the future.
 
@@ -282,6 +282,39 @@ class My10x10GridWorld:
                     break
 
                 state = state_after_n
+
+    def getLambdaReturn(self, lmbda, G_t_n, t):
+
+        G_row = G_t_n[t, :]
+        G_t_lmbda = 0
+
+        # iterate over the rows
+        for n in range(1, len(G_row)+1):
+            G_t_lmbda += lmbda**(n-1) * G_row[n]
+
+        return (1 - lmbda) * G_t_lmbda
+
+    def TDLambda(self, lmbda, G_t_n):
+        """ G_t^lambda = (1 - lambda) * sum_{n=1}^inf (lambda^{n-1} * G_T^{(n)})
+            Updates the lambda-return G_t^lambda by combining all n-step returns G_t^{(n)}.
+
+        @input:
+            lmbda: int                 - weight for averaging the returns over different n
+            G_t_n: epsiodes x n matrix - matrix of all n-step forward-view returns
+                                         column = n = how many steps to look into the future
+                                         row    = t = from which timestep is the agent starting to look into the future
+        """
+
+        # iterate over episodes
+            # start in starting_state
+                # iterate over different n
+                    # for every n remember the return you got
+                # update state value using all G_t^n you obtained
+                # Note: continue this for every state yopu ended up and take the appropriate n-step until in
+                #       terminal state
+
+
+
 
     def TD0(self, episodes):
         """ TD(0) Backup:
