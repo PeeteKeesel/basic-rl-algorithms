@@ -156,6 +156,10 @@ class My10x10GridWorld:
         #current_pi_actions_for_state = list(current_pi_actions_for_state)
         #random_action = np.random.choice(current_pi_actions_for_state, size=1)[0]
 
+        if self.isTerminalState(state):
+            return self.starting_state, self.getRewardForAction(state) + self.Gamma * self.v[self.starting_state[0],
+                                                                                             self.starting_state[1]]
+
         random_action = self.A[np.random.choice(np.array(range(0, len(self.A))), size=1)[0]]
         state_after_action = self.getIndiceAfterAction(state, random_action)
         reward = self.getRewardForAction(state)
@@ -296,11 +300,10 @@ class My10x10GridWorld:
             # maximal iterations is reacher
             no_of_iter = 0
             state = self.starting_state
-            while True:
+            for _ in range( 10000 ):
 
                 current_value = self.v[state[0], state[1]]
                 next_state, tdTarget = self.get1StepTdTargetForStateNWSE([state[0], state[1]])
-
                 self.v[state[0], state[1]] = current_value + self.Alpha * (tdTarget - current_value)
 
                 if self.isTerminalState(state):
@@ -309,9 +312,6 @@ class My10x10GridWorld:
                 # improve policy online
                 #self.policyImprovement()
 
-                if no_of_iter > 10000:
-                    print(no_of_iter)
-                    break
                 elif self.isOutOfGridOrAtWall(next_state):
                     no_of_iter += 1
                 else:
