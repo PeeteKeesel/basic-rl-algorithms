@@ -8,12 +8,14 @@ Implement
 - [x] Value Iteration 
 - [ ] First-Visit Monte Carlo
 - [ ] Every-Visit Monte Carlo
-- [ ] TD-0
+- [x] TD-0
 - [ ] TD(lambda) 
 - [ ] SARSA
 - [ ] Q-Learning
 
 ### 1. Dynamic Programming: Implement Policy Iteration and Value Iteration.
+
+![img](https://latex.codecogs.com/gif.latex?V%28S_t%29%20%5Cgets%20%5Cmathbb%7BE%7D_%7B%5Cpi%7D%5Br_%7Bt&plus;1%7D%20&plus;%20%5Cgamma%20V%28S_%7Bt%7D%29%5D)
 
 Implementing code for the simulations on [GridWorld: DP](https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_dp.html)
 
@@ -43,8 +45,11 @@ value function for each iteration as in value iteration. I.e. Directly updating 
 and then evaluation leads to the same as always only taking the action which leads to
 the successor state with maximal value.
 
+### 2. Monte Carlo
 
-### 2. Temporal Difference Learning
+
+
+### 3. Temporal Difference Learning
 
 Implementing code for the simulations on [GridWorld: TD](https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_td.html)
 
@@ -58,3 +63,10 @@ ended up after the 1-step-lookahead
 - continue procedure until final state 
 or specifid number of iterations is reached
 - go back to start state and continue 
+
+__Investigations__: _TD(0)_ converges to the __correct__ answer (value function/policy)
+but not to the optimal policy!
+
+__SARSA__
+
+__Q-Learning__
