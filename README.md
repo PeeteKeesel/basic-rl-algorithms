@@ -47,13 +47,17 @@ the successor state with maximal value.
 
 ### 2. Monte Carlo
 
+![img](https://latex.codecogs.com/gif.latex?V%28S_t%29%20%5Cgets%20V%28S_t%29%20&plus;%20%5Calpha%5BR_%7Bt%7D%20-%20V%28S_t%29%5D)
 
 
 ### 3. Temporal Difference Learning
 
+
 Implementing code for the simulations on [GridWorld: TD](https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_td.html)
 
 __TD(0)__
+
+![img](https://latex.codecogs.com/gif.latex?V%28S_t%29%20%5Cgets%20V%28S_t%29%20&plus;%20%5Calpha%5Br_%7Bt&plus;1%7D%20&plus;%20%5Cgamma%20V%28S_%7Bt&plus;1%7D%29%20-%20V%28S_t%29%5D)
 
 - start in a start state
 - update current state using a 1-step-lookahead
@@ -69,4 +73,8 @@ but not to the optimal policy!
 
 __SARSA__
 
+![img](https://latex.codecogs.com/gif.latex?Q%28S_t%2C%20A_t%29%20%5Cgets%20Q%28S_t%2C%20A_t%29%20&plus;%20%5Calpha%20%5B%20R_%7Bt&plus;1%7D%20&plus;%20%5Cgamma%20Q%28S_%7Bt&plus;1%7D%2C%20A_%7Bt&plus;1%7D%29-%20Q%28S_t%2C%20A_t%29%20%5D)
+
 __Q-Learning__
+
+![img](https://latex.codecogs.com/gif.latex?Q%28S_t%2C%20A_t%29%20%5Cgets%20Q%28S_t%2C%20A_t%29%20&plus;%20%5Calpha%20%5B%20R_%7Bt&plus;1%7D%20&plus;%20%5Cgamma%20%5Cmax_%7Ba%7DQ%28S_%7Bt&plus;1%7D%2C%20A_%7Bt&plus;1%7D%29-%20Q%28S_t%2C%20A_t%29%20%5D)
