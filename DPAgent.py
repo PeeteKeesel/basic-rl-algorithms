@@ -1,112 +1,19 @@
-"""
-Rewrite the 'GridWorld: DP' example from https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_dp.html
-"""
 
-import numpy as np
-
-"""Define the environment"""
-# Actions
-A = ["n", "w", "s", "e"]
-
-# Policy = random uniform
-piProbs = {A[0]: .25, A[1]: .25, A[2]: .25, A[3]: .25}
-
-# Rewards
-rewards = {"pos": 1, "neg": -1}
-neg_reward_states = np.array([[3, 3], [4, 5], [4, 6], [5, 6], [5, 8], [6, 8], [7, 3], [7, 5], [7, 6]])
-pos_reward_states = np.array([[5, 5]])
-
-# Walls
-Walls = np.array([[2, 1], [2, 2], [2, 3], [2, 4],
-                  [3, 4], [4, 4], [5, 4], [6, 4], [7, 4],
-                  [2, 6], [2, 7], [2, 8]])
-
-# Undiscounted episodic MDP
-Gamma = 0.9
-
-# Grid dimension
-NROWS, NCOLS = 10, 10
-
-# Value Function
-v = np.zeros((NROWS, NCOLS))
-pi = np.full([NROWS, NCOLS], "nwse")
-
-terminal_states = np.array([[5, 5]])
-starting_state = np.array([[0, 0]])
-
-# Stopping criterion
-eps = 1e-4
-
-########################################################################################################################
-# Policy Iteration: Policy Evaluation & Policy Improvement
-########################################################################################################################
+from GlobalParams import *
+from BaseGridWorldClass import My10x10GridWorld
 
 
-class My10x10GridWorld:
+"""Extend base class by implementing 
+        Policy Iteration : Iteratively Policy Evaluation & Policy Improvement
+        Value Iteration  : Find opt. Value Function & then update Policy"""
+class DPAgent(My10x10GridWorld):
 
-    def __init__(self, shape, starting_state, terminal_states, A,
-                 rewards, neg_reward_states, pos_reward_states, Walls,
-                 Gamma, v, pi, piProbs, eps):
-        self.NROWS = shape[0]
-        self.NCOLS = shape[1]
-        self.v = np.zeros((self.NROWS, self.NCOLS))
-        self.starting_state = starting_state
-        self.terminal_states = terminal_states
-
-        self.A = A
-        self.rewards = rewards
-        self.neg_reward_states = neg_reward_states
-        self.pos_reward_states = pos_reward_states
-        self.walls = Walls
-
-        self.Gamma = Gamma
-
-        self.v = v
-        self.pi = pi
-        self.piProbs = piProbs
-
-        self.eps = eps
-
-    @staticmethod
-    def getIndiceAfterAction(current_state, a):
-        """Get the indice for an action."""
-        if a == "n":
-            return [current_state[0] - 1, current_state[1]]
-        if a == "w":
-            return [current_state[0],     current_state[1] - 1]
-        if a == "s":
-            return [current_state[0] + 1, current_state[1]]
-        if a == "e":
-            return [current_state[0],     current_state[1] + 1]
-        else:
-            print(f"Action {a} is not a feasible input ('n', 'w', 's', 'e').")
-
-    @staticmethod
-    def isIn(possible_elem_of_set, set):
-        return next((True for elem in set if np.array_equal(elem, possible_elem_of_set)), False)
-
-    @staticmethod
-    def countCharsInString(string):
-        return len(string.replace(" ", ""))
-
-    def isOutOfGridOrAtWall(self, current_state):
-        """Check if current_state is out of the GridWorld or in a wall."""
-        return (not ((0 <= current_state[0] <= self.NROWS - 1) and (0 <= current_state[1] <= self.NCOLS - 1))) or \
-               self.isIn(current_state, self.walls)
-
-    def getRewardForAction(self, next_state):
-        if self.isIn(next_state, self.neg_reward_states):
-            return self.rewards['neg']
-        elif self.isIn(next_state, self.pos_reward_states):
-            return self.rewards['pos']
-        else:
-            return 0
-
-    def isTerminalState(self, s):
-        return self.isIn(s, self.terminal_states)
-
+    """New methods used for DP"""
     def policyEvaluation(self, vOld):
-        """Iterative Policy Evaluation: Do one update of the value function of Iterative Policy Evaluation"""
+        """
+        Iterative Policy Evaluation: Do one update of the value function of Iterative Policy Evaluation.
+        Note: Takes the sum of all successor states.
+        """
         vNew = np.zeros((self.NROWS, self.NCOLS))
 
         # following a random policy we update the value function
@@ -154,7 +61,7 @@ class My10x10GridWorld:
 
         return np.round(vNew, 2)
 
-    def policyImprovement(self, vk):
+    def policyImprovementExternal(self, vk):
         """Greedy Policy Improvement: Update Policy greedily for each value function at time-step k"""
         piUpdate = np.empty([self.NROWS, self.NCOLS], dtype="<U10")
 
@@ -192,7 +99,11 @@ class My10x10GridWorld:
         return piUpdate
 
     def valueIteration(self, vOld):
-        """Does Value Iteration: Find optimal Policy + then update policy"""
+        """
+        Does Value Iteration: Find optimal value function --> optimal policy + then update policy.
+        Note: Always takes the action which leads to the state with the maximal value.
+
+        """
         vNew = np.zeros((self.NROWS, self.NCOLS))
 
         # following a random policy we update the value function
@@ -259,7 +170,7 @@ class My10x10GridWorld:
 
         for k in range(1, iter):
             vNew = self.policyEvaluation(vOld)
-            piNew = self.policyImprovement(vNew)
+            piNew = self.policyImprovementExternal(vNew)
             if k in whenToPrint:
                 print(f"-- k={k}\n{piNew}")
 
@@ -275,7 +186,7 @@ class My10x10GridWorld:
         for k in range(1, iter + 1):
             vNew = self.policyEvaluation(vOld)
             self.v = vNew
-            self.pi = self.policyImprovement(vNew)
+            self.pi = self.policyImprovementExternal(vNew)
             if k in whenToPrint:
                 print(f"-- k={k}\n{self.v}\n{self.pi}")
 
@@ -298,10 +209,10 @@ class My10x10GridWorld:
             vOld = vNew.copy()
 
 
-########################################################################################################################
-GridWorld = My10x10GridWorld([NROWS, NCOLS], starting_state, terminal_states, A,
-                             rewards, neg_reward_states, pos_reward_states, Walls,
-                             Gamma, v, pi, piProbs, eps)
+"""Let the agent reinforce"""
+dp_agent = DPAgent([NROWS, NCOLS], starting_state, terminal_states, A,
+                  rewards, neg_reward_states, pos_reward_states, Walls,
+                  Gamma, v, pi, piProbs, eps, Alpha, epsilon)
 
 whenToPrint = np.array([1, 2, 3, 4, 5, 10, 100])
 noOfIters = 4
@@ -312,10 +223,10 @@ whatToDo = input("Press 1 for Policy Evaluation:\n"
                  "      4 for Value Iteration: ")
 
 if whatToDo == "1":
-    GridWorld.runPolicyEvaluation(whenToPrint, noOfIters)
+    dp_agent.runPolicyEvaluation(whenToPrint, noOfIters)
 elif whatToDo == "2":
-    GridWorld.runPolicyImprovement(whenToPrint, noOfIters)
+    dp_agent.runPolicyImprovement(whenToPrint, noOfIters)
 elif whatToDo == "3":
-    GridWorld.runPolicyIteration(whenToPrint, noOfIters)
+    dp_agent.runPolicyIteration(whenToPrint, noOfIters)
 elif whatToDo == "4":
-    GridWorld.runValueIteration(whenToPrint, noOfIters)
+    dp_agent.runValueIteration(whenToPrint, noOfIters)
