@@ -11,7 +11,7 @@ Implement
 - [x] Every-Visit Monte Carlo
 - [x] TD-0
 - [ ] TD(lambda) 
-- [ ] SARSA
+- [x] SARSA
 - [ ] Q-Learning
 
 ToDo (optional): 

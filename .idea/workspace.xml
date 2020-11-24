@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="03365095-4664-4489-b6eb-d1b5643a89d1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BaseGridWorldClass.py" beforeDir="false" afterPath="$PROJECT_DIR$/BaseGridWorldClass.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DPAgent.py" beforeDir="false" afterPath="$PROJECT_DIR$/DPAgent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GlobalParams.py" beforeDir="false" afterPath="$PROJECT_DIR$/GlobalParams.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MCAgent.py" beforeDir="false" afterPath="$PROJECT_DIR$/MCAgent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QLearningAgent.py" beforeDir="false" afterPath="$PROJECT_DIR$/QLearningAgent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SARSAAgent.py" beforeDir="false" afterPath="$PROJECT_DIR$/SARSAAgent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TD0Agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/TD0Agent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
