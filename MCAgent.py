@@ -9,7 +9,13 @@ class MCAgent(My10x10GridWorld):
 
     """New methods used for MC"""
     def firstVisitMCPrediction(self, episodes):
-        """Estimates the value function by averaging all first visit returns."""
+        """
+        Estimates the value function by by using first-visit monte-carlo method. This
+        averages all first visit returns for each state in the trajectory of an episode.
+
+        :param
+            epsiodes: int - number of episodes to run
+        """
 
         # counter for each state - to calculate the average return in the end
         N_s = np.zeros((self.NROWS, self.NCOLS))
@@ -107,6 +113,4 @@ mc_agent = MCAgent([NROWS, NCOLS], starting_state, terminal_states, A,
                    rewards, neg_reward_states, pos_reward_states, Walls,
                    Gamma, v, pi, piProbs, eps, Alpha, epsilon)
 
-whenToPrint = np.array([1, 2, 3, 4, 5, 10, 100])
-noOfIters = 2
 mc_agent.runFirstVisitMonteCarlo(100)
