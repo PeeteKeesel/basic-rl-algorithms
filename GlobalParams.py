@@ -24,9 +24,20 @@ Gamma = 0.9
 # Grid dimension
 NROWS, NCOLS = 10, 10
 
-# Value Function
+# State Value Function
 v = np.zeros((NROWS, NCOLS))
+# Policy
 pi = np.full([NROWS, NCOLS], "nwse")
+
+# decode state
+states_encoded = dict()
+for i, row in enumerate(range(NROWS)):
+    for j, col in enumerate(range(NCOLS)):
+        ind = i*(NROWS-1) + i + j
+        states_encoded[ind] = np.array([row, col])
+
+# State-Action Value Function
+Q = np.zeros((len(states_encoded.keys()), len(A)))
 
 terminal_states = np.array([[5, 5]])
 starting_state = np.array([0, 0])

@@ -10,7 +10,7 @@ class My10x10GridWorld(object):
 
     def __init__(self, shape, starting_state, terminal_states, A,
                  rewards, neg_reward_states, pos_reward_states, Walls,
-                 Gamma, v, pi, piProbs, eps, Alpha, epsilon):
+                 Gamma, v, pi, piProbs, states_encoded, Q, eps, Alpha, epsilon):
         self.NROWS = shape[0]
         self.NCOLS = shape[1]
         self.v = np.zeros((self.NROWS, self.NCOLS))
@@ -28,6 +28,9 @@ class My10x10GridWorld(object):
         self.v = v
         self.pi = pi
         self.piProbs = piProbs
+
+        self.states_encoded = states_encoded
+        self.Q = Q
 
         self.eps = eps
         self.Alpha = Alpha
@@ -80,6 +83,9 @@ class My10x10GridWorld(object):
         """
         return len(string.replace(" ", ""))
 
+    def getIndexInActionList(self, a):
+        return self.A.index(a)
+
     def isOutOfGridOrAtWall(self, state):
         """
         Check if current_state is out of the GridWorld or in a wall.
@@ -121,10 +127,9 @@ class My10x10GridWorld(object):
         """
         return self.isIn(state, self.terminal_states)
 
-    def policyImprovement(self):
+    def policyImprovementByV(self):
         """
-        Does Greedy Policy Improvement: Update Policy greedily for each value function at time-step k.
-        Updates the policy using the current value function.
+        Does Greedy Policy Improvement using the current state-value function v(s).
         """
         for row in range(self.NROWS):
             for col in range(self.NCOLS):
@@ -154,3 +159,55 @@ class My10x10GridWorld(object):
                 directions = [self.A[ind] for ind in maxIndices]
 
                 self.pi[row, col] = "{:<4}".format("".join(directions))
+
+    def takeRandomAction(self):
+        return self.A[np.random.choice(np.array(range(0, len(self.A))), size=1)[0]]
+
+    def decodeState(self, state):
+        """
+        Returns the key for state which is the row of the Q(s,a) table
+
+        :param
+            state: 2d-list - some state in the grid
+        :return
+            int - the key which encodes the state in the dictionary states_decoded
+        """
+        temp = 0
+        for i, state_enc in enumerate(self.states_encoded.values()):
+            if np.array_equal(state_enc, state):
+                temp = i
+        return list(self.states_encoded.keys())[temp]
+
+    def policyImprovementByQ(self):
+        """
+        Does Greedy Policy Improvement using the current state-action-value function q(s, a).
+        """
+        for row in range(self.NROWS):
+            for col in range(self.NCOLS):
+
+                if self.isOutOfGridOrAtWall([row, col]):
+                    self.pi[row, col] = "XXXX"
+                    continue
+                    
+                # choose the action for which q(s, a) is taking the max value
+                q_s = self.Q[self.decodeState(np.array([row, col])), :]
+
+                # only those indices (columns=actions) which lead to legal states
+                indices_of_legal_actions = [i for i, q in enumerate(q_s) if not
+                self.isOutOfGridOrAtWall(self.getIndiceAfterAction([row, col], self.A[i]))]
+
+                # all values of the row in q
+                qs = [q for i, q in enumerate(q_s) if self.isIn(i, indices_of_legal_actions)]
+                indices_of_max_elems = [m for i, m in enumerate(indices_of_legal_actions)
+                                        if q_s[m] == np.max(qs)]
+
+                all_max_actions = []
+                for i, a in enumerate(self.A):
+                    if self.isOutOfGridOrAtWall(self.getIndiceAfterAction([row, col], a)):
+                        continue
+                    if i in indices_of_max_elems:
+                        all_max_actions.append(a)
+                        #self.pi[row, col] += a
+
+                self.pi[row, col] = "{:<4}".format("".join(all_max_actions))
+

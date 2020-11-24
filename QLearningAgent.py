@@ -12,3 +12,10 @@ class QLearningAgent(My10x10GridWorld):
 
     def runQLearning(self):
         return 0
+
+"""Let the agent reinforce"""
+qlearning_agent = QLearningAgent([NROWS, NCOLS], starting_state, terminal_states, A,
+                         rewards, neg_reward_states, pos_reward_states, Walls,
+                         Gamma, v, pi, piProbs, states_encoded, Q, eps, Alpha, epsilon)
+
+qlearning_agent.runQLearning()

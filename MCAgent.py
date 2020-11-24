@@ -35,7 +35,7 @@ class MCAgent(My10x10GridWorld):
             while not self.isTerminalState(state): # until terminal state is reached
 
                 state_traj = np.vstack((state_traj, state))
-                rdm_action = self.A[np.random.choice(np.array(range(0, len(self.A))), size=1)[0]]
+                rdm_action = self.takeRandomAction()
                 action_traj = np.append(action_traj, rdm_action)
                 state_after_action = self.getIndiceAfterAction(state, rdm_action)
                 reward_traj = np.append(reward_traj, self.getRewardForAction(state))
@@ -45,7 +45,7 @@ class MCAgent(My10x10GridWorld):
 
             # for the terminal state
             state_traj = np.vstack((state_traj, state))
-            action_traj = np.append(action_traj, self.A[np.random.choice(np.array(range(0, len(self.A))), size=1)[0]])
+            action_traj = np.append(action_traj, self.takeRandomAction())
             reward_traj = np.append(reward_traj, self.getRewardForAction(state))
 
             # to get the correct indice in reverse order
@@ -90,7 +90,7 @@ class MCAgent(My10x10GridWorld):
             while not self.isTerminalState(state): # until terminal state is reached
 
                 state_traj = np.vstack((state_traj, state))
-                rdm_action = self.A[np.random.choice(np.array(range(0, len(self.A))), size=1)[0]]
+                rdm_action = self.takeRandomAction()
                 action_traj = np.append(action_traj, rdm_action)
                 state_after_action = self.getIndiceAfterAction(state, rdm_action)
                 reward_traj = np.append(reward_traj, self.getRewardForAction(state))
@@ -100,7 +100,7 @@ class MCAgent(My10x10GridWorld):
 
             # for the terminal state
             state_traj = np.vstack((state_traj, state))
-            action_traj = np.append(action_traj, self.A[np.random.choice(np.array(range(0, len(self.A))), size=1)[0]])
+            action_traj = np.append(action_traj, self.takeRandomAction())
             reward_traj = np.append(reward_traj, self.getRewardForAction(state))
 
             # to get the correct indice in reverse order
@@ -120,21 +120,21 @@ class MCAgent(My10x10GridWorld):
         """Runs first-visit Monte-Carlo Method"""
 
         self.firstVisitMCPrediction(episodes)
-        self.policyImprovement()
+        self.policyImprovementByV()
         print(self.pi)
 
     def runEveryVisitMonteCarlo(self, episodes = 10):
         """Runs every-visit Monte-Carlo Method"""
 
         self.everyVisitMCPrediction(episodes)
-        self.policyImprovement()
+        self.policyImprovementByV()
         print(self.pi)
 
 
 """Let the agent reinforce"""
 mc_agent = MCAgent([NROWS, NCOLS], starting_state, terminal_states, A,
                    rewards, neg_reward_states, pos_reward_states, Walls,
-                   Gamma, v, pi, piProbs, eps, Alpha, epsilon)
+                   Gamma, v, pi, piProbs, states_encoded, Q, eps, Alpha, epsilon)
 
 whatToDo = input("Press 1 for First-Visit Monte-Carlo:\n"
                  "      2 for Every-Visit Monte-Carlo: ")

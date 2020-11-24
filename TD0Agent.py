@@ -71,7 +71,7 @@ class TD0Agent(My10x10GridWorld):
             totIters.append(no_of_iter)
 
         # improve policy online
-        self.policyImprovement()
+        self.policyImprovementByV()
         print(f"final policy:\n{self.pi}")
 
     def runTD0(self):
@@ -229,6 +229,6 @@ class TD0Agent(My10x10GridWorld):
 """Let the agent reinforce"""
 td0_agent = TD0Agent([NROWS, NCOLS], starting_state, terminal_states, A,
                     rewards, neg_reward_states, pos_reward_states, Walls,
-                    Gamma, v, pi, piProbs, eps, Alpha, epsilon)
+                    Gamma, v, pi, piProbs, states_encoded, Q, eps, Alpha, epsilon)
 
 td0_agent.runTD0()

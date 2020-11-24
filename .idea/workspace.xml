@@ -2,7 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="03365095-4664-4489-b6eb-d1b5643a89d1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BaseGridWorldClass.py" beforeDir="false" afterPath="$PROJECT_DIR$/BaseGridWorldClass.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DPAgent.py" beforeDir="false" afterPath="$PROJECT_DIR$/DPAgent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GlobalParams.py" beforeDir="false" afterPath="$PROJECT_DIR$/GlobalParams.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MCAgent.py" beforeDir="false" afterPath="$PROJECT_DIR$/MCAgent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/QLearningAgent.py" beforeDir="false" afterPath="$PROJECT_DIR$/QLearningAgent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SARSAAgent.py" beforeDir="false" afterPath="$PROJECT_DIR$/SARSAAgent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TD0Agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/TD0Agent.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +38,28 @@
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
     <property name="settings.editor.splitter.proportion" value="0.26900584" />
   </component>
-  <component name="RunManager" selected="Python.MCAgent">
+  <component name="RunManager" selected="Python.SARSAAgent">
+    <configuration name="GlobalParams" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="KaparthyReinforceJSRedo" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/GlobalParams.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="GridWorldDynamicProgramming" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="KaparthyReinforceJSRedo" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -74,6 +102,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="SARSAAgent" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="KaparthyReinforceJSRedo" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/SARSAAgent.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="TD0Agent" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="KaparthyReinforceJSRedo" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -97,6 +146,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.SARSAAgent" />
+        <item itemvalue="Python.GlobalParams" />
         <item itemvalue="Python.MCAgent" />
         <item itemvalue="Python.TD0Agent" />
         <item itemvalue="Python.GridWorldDynamicProgramming" />
@@ -121,33 +172,37 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="549" height="1001" key="GridCell.Tab.0.bottom" timestamp="1606215971396">
+    <state width="999" height="998" key="GridCell.Tab.0.bottom" timestamp="1606235982079">
       <screen x="1680" y="-888" width="3440" height="1415" />
     </state>
     <state width="549" height="664" key="GridCell.Tab.0.bottom/0.0.1680.1050@0.0.1680.1050" timestamp="1606177836784" />
-    <state width="549" height="1001" key="GridCell.Tab.0.bottom/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1606215971396" />
+    <state width="999" height="998" key="GridCell.Tab.0.bottom/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1606235982079" />
     <state width="840" height="546" key="GridCell.Tab.0.bottom/61.25.1619.1025@61.25.1619.1025" timestamp="1605736166382" />
-    <state width="549" height="1001" key="GridCell.Tab.0.center" timestamp="1606215971395">
+    <state width="999" height="998" key="GridCell.Tab.0.center" timestamp="1606235982078">
       <screen x="1680" y="-888" width="3440" height="1415" />
     </state>
     <state width="549" height="664" key="GridCell.Tab.0.center/0.0.1680.1050@0.0.1680.1050" timestamp="1606177836782" />
-    <state width="549" height="1001" key="GridCell.Tab.0.center/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1606215971395" />
+    <state width="999" height="998" key="GridCell.Tab.0.center/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1606235982078" />
     <state width="840" height="546" key="GridCell.Tab.0.center/61.25.1619.1025@61.25.1619.1025" timestamp="1605736166382" />
-    <state width="549" height="1001" key="GridCell.Tab.0.left" timestamp="1606215971394">
+    <state width="999" height="998" key="GridCell.Tab.0.left" timestamp="1606235982077">
       <screen x="1680" y="-888" width="3440" height="1415" />
     </state>
     <state width="549" height="664" key="GridCell.Tab.0.left/0.0.1680.1050@0.0.1680.1050" timestamp="1606177836782" />
-    <state width="549" height="1001" key="GridCell.Tab.0.left/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1606215971394" />
+    <state width="999" height="998" key="GridCell.Tab.0.left/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1606235982077" />
     <state width="840" height="546" key="GridCell.Tab.0.left/61.25.1619.1025@61.25.1619.1025" timestamp="1605736166381" />
-    <state width="549" height="1001" key="GridCell.Tab.0.right" timestamp="1606215971395">
+    <state width="999" height="998" key="GridCell.Tab.0.right" timestamp="1606235982078">
       <screen x="1680" y="-888" width="3440" height="1415" />
     </state>
     <state width="549" height="664" key="GridCell.Tab.0.right/0.0.1680.1050@0.0.1680.1050" timestamp="1606177836783" />
-    <state width="549" height="1001" key="GridCell.Tab.0.right/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1606215971395" />
+    <state width="999" height="998" key="GridCell.Tab.0.right/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1606235982078" />
     <state width="840" height="546" key="GridCell.Tab.0.right/61.25.1619.1025@61.25.1619.1025" timestamp="1605736166382" />
     <state x="2215" y="-588" width="1432" height="1021" key="SettingsEditor" timestamp="1605630164358">
       <screen x="1680" y="-888" width="3440" height="1415" />
     </state>
     <state x="2215" y="-588" width="1432" height="1021" key="SettingsEditor/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1605630164358" />
+    <state x="2527" y="-442" width="695" height="580" key="find.popup" timestamp="1606233635813">
+      <screen x="1680" y="-888" width="3440" height="1415" />
+    </state>
+    <state x="2527" y="-442" width="695" height="580" key="find.popup/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1606233635813" />
   </component>
 </project>

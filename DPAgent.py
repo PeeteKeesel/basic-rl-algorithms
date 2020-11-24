@@ -162,7 +162,7 @@ class DPAgent(My10x10GridWorld):
 
             vOld = vNew.copy()
 
-    def runPolicyImprovement(self, whenToPrint, iter):
+    def runpolicyImprovementByV(self, whenToPrint, iter):
         """Does Policy Improvememt = Greedy Policy Improvement"""
         pi0 = np.full([NROWS, NCOLS], "nwse")
         vOld = self.v.copy()
@@ -212,7 +212,7 @@ class DPAgent(My10x10GridWorld):
 """Let the agent reinforce"""
 dp_agent = DPAgent([NROWS, NCOLS], starting_state, terminal_states, A,
                   rewards, neg_reward_states, pos_reward_states, Walls,
-                  Gamma, v, pi, piProbs, eps, Alpha, epsilon)
+                  Gamma, v, pi, piProbs, states_encoded, Q, eps, Alpha, epsilon)
 
 whenToPrint = np.array([1, 2, 3, 4, 5, 10, 100])
 noOfIters = 4
@@ -225,7 +225,7 @@ whatToDo = input("Press 1 for Policy Evaluation:\n"
 if whatToDo == "1":
     dp_agent.runPolicyEvaluation(whenToPrint, noOfIters)
 elif whatToDo == "2":
-    dp_agent.runPolicyImprovement(whenToPrint, noOfIters)
+    dp_agent.runpolicyImprovementByV(whenToPrint, noOfIters)
 elif whatToDo == "3":
     dp_agent.runPolicyIteration(whenToPrint, noOfIters)
 elif whatToDo == "4":
