@@ -2,12 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="03365095-4664-4489-b6eb-d1b5643a89d1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/MCAgent.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GridWorldDynamicProgramming.py" beforeDir="false" afterPath="$PROJECT_DIR$/DPAgent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GridWorldMonteCarlo.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GridWorldTemporalDifference.py" beforeDir="false" afterPath="$PROJECT_DIR$/TDAgent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BaseGridWorldClass.py" beforeDir="false" afterPath="$PROJECT_DIR$/BaseGridWorldClass.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MCAgent.py" beforeDir="false" afterPath="$PROJECT_DIR$/MCAgent.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TDAgent.py" beforeDir="false" afterPath="$PROJECT_DIR$/TD0Agent.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +35,7 @@
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
     <property name="settings.editor.splitter.proportion" value="0.26900584" />
   </component>
-  <component name="RunManager" selected="Python.GridWorldDynamicProgramming">
+  <component name="RunManager" selected="Python.MCAgent">
     <configuration name="GridWorldDynamicProgramming" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="KaparthyReinforceJSRedo" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -79,7 +78,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="TDAgent" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="TD0Agent" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="KaparthyReinforceJSRedo" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -91,7 +90,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/TDAgent.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/TD0Agent.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -102,9 +101,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.GridWorldDynamicProgramming" />
-        <item itemvalue="Python.TDAgent" />
         <item itemvalue="Python.MCAgent" />
+        <item itemvalue="Python.TD0Agent" />
+        <item itemvalue="Python.GridWorldDynamicProgramming" />
       </list>
     </recent_temporary>
   </component>
@@ -126,25 +125,29 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="563" height="1001" key="GridCell.Tab.0.bottom" timestamp="1606139926329">
-      <screen x="1680" y="-888" width="3440" height="1415" />
+    <state width="549" height="664" key="GridCell.Tab.0.bottom" timestamp="1606177836784">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state width="563" height="1001" key="GridCell.Tab.0.bottom/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1606139926329" />
+    <state width="549" height="664" key="GridCell.Tab.0.bottom/0.0.1680.1050@0.0.1680.1050" timestamp="1606177836784" />
+    <state width="563" height="1001" key="GridCell.Tab.0.bottom/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1606140458803" />
     <state width="840" height="546" key="GridCell.Tab.0.bottom/61.25.1619.1025@61.25.1619.1025" timestamp="1605736166382" />
-    <state width="563" height="1001" key="GridCell.Tab.0.center" timestamp="1606139926328">
-      <screen x="1680" y="-888" width="3440" height="1415" />
+    <state width="549" height="664" key="GridCell.Tab.0.center" timestamp="1606177836782">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state width="563" height="1001" key="GridCell.Tab.0.center/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1606139926328" />
+    <state width="549" height="664" key="GridCell.Tab.0.center/0.0.1680.1050@0.0.1680.1050" timestamp="1606177836782" />
+    <state width="563" height="1001" key="GridCell.Tab.0.center/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1606140458802" />
     <state width="840" height="546" key="GridCell.Tab.0.center/61.25.1619.1025@61.25.1619.1025" timestamp="1605736166382" />
-    <state width="563" height="1001" key="GridCell.Tab.0.left" timestamp="1606139926328">
-      <screen x="1680" y="-888" width="3440" height="1415" />
+    <state width="549" height="664" key="GridCell.Tab.0.left" timestamp="1606177836782">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state width="563" height="1001" key="GridCell.Tab.0.left/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1606139926328" />
+    <state width="549" height="664" key="GridCell.Tab.0.left/0.0.1680.1050@0.0.1680.1050" timestamp="1606177836782" />
+    <state width="563" height="1001" key="GridCell.Tab.0.left/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1606140458801" />
     <state width="840" height="546" key="GridCell.Tab.0.left/61.25.1619.1025@61.25.1619.1025" timestamp="1605736166381" />
-    <state width="563" height="1001" key="GridCell.Tab.0.right" timestamp="1606139926329">
-      <screen x="1680" y="-888" width="3440" height="1415" />
+    <state width="549" height="664" key="GridCell.Tab.0.right" timestamp="1606177836783">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state width="563" height="1001" key="GridCell.Tab.0.right/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1606139926329" />
+    <state width="549" height="664" key="GridCell.Tab.0.right/0.0.1680.1050@0.0.1680.1050" timestamp="1606177836783" />
+    <state width="563" height="1001" key="GridCell.Tab.0.right/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1606140458802" />
     <state width="840" height="546" key="GridCell.Tab.0.right/61.25.1619.1025@61.25.1619.1025" timestamp="1605736166382" />
     <state x="2215" y="-588" width="1432" height="1021" key="SettingsEditor" timestamp="1605630164358">
       <screen x="1680" y="-888" width="3440" height="1415" />

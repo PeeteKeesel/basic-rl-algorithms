@@ -4,6 +4,7 @@ Rewrite the 'GridWorld: DP' example from https://cs.stanford.edu/people/karpathy
 
 from GlobalParams import np
 
+
 """The class"""
 class My10x10GridWorld(object):
 
@@ -93,7 +94,7 @@ class My10x10GridWorld(object):
 
     def getRewardForAction(self, state):
         """
-        Returns the reward and agent gets when leaving its current state.
+        Returns the reward an agent gets when leaving its current state.
         Note: In the current scenario the agent always gets the same reward leaving a state no matter which action
               it takes.
 

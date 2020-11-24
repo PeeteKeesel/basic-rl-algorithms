@@ -8,22 +8,53 @@ from BaseGridWorldClass import My10x10GridWorld
 class MCAgent(My10x10GridWorld):
 
     """New methods used for MC"""
-    def getReturnForState(self, state, count, totReturn):
+    def firstVisitMCPrediction(self, episodes):
+        """Estimates the value function by averaging all first visit returns."""
 
-        totReturn += self.Gamma**count * self.getRewardForAction(state)
-        count += 1
+        # counter for each state - to calculate the average return in the end
+        N_s = np.zeros((self.NROWS, self.NCOLS))
+        Returns_s = np.zeros((self.NROWS, self.NCOLS))
 
-        if self.isTerminalState(state):
-            return totReturn
-        else:
-            # choose action randomly
-            rdm_a = self.A[np.random.choice(np.array(range(0, len(self.A))), size=1)[0]]
-            state_after_action = self.getIndiceAfterAction(state, rdm_a)
+        # number of episodes = times agent goes back to start state
+        for episode in range(episodes):
 
-            if self.isOutOfGridOrAtWall(state_after_action):
-                return self.getReturnForState(state, count, totReturn)
-            else:
-                return self.getReturnForState(state_after_action, count, totReturn)
+            print(f"-- episode={episode}\n{np.round(self.v, 2)}")
+
+            # counter for each state per episode - to check first-visits
+            N_s_per_episode = np.zeros((self.NROWS, self.NCOLS))
+            state = self.starting_state
+            state_traj, action_traj, reward_traj = np.empty((0, 2), dtype=int), np.empty(0), np.empty(0)
+
+            # generate state, action, reward trajectory for the episode
+            while not self.isTerminalState(state): # until terminal state is reached
+
+                state_traj = np.vstack((state_traj, state))
+                rdm_action = self.A[np.random.choice(np.array(range(0, len(self.A))), size=1)[0]]
+                action_traj = np.append(action_traj, rdm_action)
+                state_after_action = self.getIndiceAfterAction(state, rdm_action)
+                reward_traj = np.append(reward_traj, self.getRewardForAction(state))
+
+                if not self.isOutOfGridOrAtWall(state_after_action):
+                    state = state_after_action
+
+            # for the terminal state
+            state_traj = np.vstack((state_traj, state))
+            action_traj = np.append(action_traj, self.A[np.random.choice(np.array(range(0, len(self.A))), size=1)[0]])
+            reward_traj = np.append(reward_traj, self.getRewardForAction(state))
+
+            G_t = 0
+            for t, state in enumerate(reversed(state_traj)):
+                G_t += reward_traj[t]
+
+                if N_s_per_episode[state[0], state[1]] == 0:
+                    N_s_per_episode[state[0], state[1]] += 1
+                    N_s[state[0], state[1]] += 1
+                    Returns_s[state[0], state[1]] += G_t
+
+            self.v = np.divide(Returns_s, N_s, out=np.zeros_like(Returns_s), where=N_s != 0)
+
+        self.v = np.divide(Returns_s, N_s, out=np.zeros_like(Returns_s), where=N_s!=0)
+
 
     def monteCarloFirstVisitPolicyEvaluation(self, vOld):
         """ MC Backup:
@@ -57,35 +88,25 @@ class MCAgent(My10x10GridWorld):
 
         return np.round(vNew, 2)
 
-    def runMonteCarlo(self, whenToPrint, iter):
-        """Does Policy Evaluation"""
-        vOld = self.v.copy()
-        print(f"-- k=0\n{vOld}")
+    def runFirstVisitMonteCarlo(self, episodes = 10):
+        """Runs first-visit Monte-Carlo Method"""
 
-        for k in range(1, iter):
-            vNew = self.monteCarloFirstVisitPolicyEvaluation(vOld)
-            print("Hallo")
-            if k in whenToPrint:
-                print(f"-- k={k}\n{vNew}")
-
-            # check for convergence via stopping criterion
-            #if np.abs(np.sum(vNew - vOld)) < eps:
-            #    print(f"Policy Evaluation converged after k={k} iteration using eps={eps}.")
-            #    break
-
-            vOld = vNew.copy()
+        self.firstVisitMCPrediction(episodes)
+        self.policyImprovement()
+        print(self.pi)
 
     def monteCarloEveryVisitPolicyEvaluation(self):
         """ MC Backup:
             V(S_t) = V(S_t) + lambda * (G_t - V(S_t))
         """
+        # TODO: Implement Every-Visit MC
         return 0
 
-########################################################################################################################
+"""Let the agent reinforce"""
 mc_agent = MCAgent([NROWS, NCOLS], starting_state, terminal_states, A,
                    rewards, neg_reward_states, pos_reward_states, Walls,
                    Gamma, v, pi, piProbs, eps, Alpha, epsilon)
 
 whenToPrint = np.array([1, 2, 3, 4, 5, 10, 100])
 noOfIters = 2
-mc_agent.runMonteCarlo(whenToPrint, noOfIters)
+mc_agent.runFirstVisitMonteCarlo(100)
