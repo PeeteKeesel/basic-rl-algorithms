@@ -7,7 +7,7 @@ Implement
 
 - [x] Policy Iteration
 - [x] Value Iteration 
-- [ ] First-Visit Monte Carlo
+- [x] First-Visit Monte Carlo
 - [ ] Every-Visit Monte Carlo
 - [x] TD-0
 - [ ] TD(lambda) 
