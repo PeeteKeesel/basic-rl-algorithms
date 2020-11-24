@@ -14,6 +14,16 @@ Implement
 - [ ] SARSA
 - [ ] Q-Learning
 
+ToDo (optional): 
+- [ ] write tests
+    - [ ] Policy Iteration
+    - [ ] Value Iteration
+    - [ ] First- and Every-Visit Monte-Carlo
+    - [ ] TD-0
+    - [ ] SARSA
+    - [ ] Q-Learning
+    
+
 ### 1. Dynamic Programming: Implement Policy Iteration and Value Iteration.
 
 ![img](https://latex.codecogs.com/gif.latex?V%28S_t%29%20%5Cgets%20%5Cmathbb%7BE%7D_%7B%5Cpi%7D%5Br_%7Bt&plus;1%7D%20&plus;%20%5Cgamma%20V%28S_%7Bt%7D%29%5D)
