@@ -7,11 +7,6 @@ from BaseGridWorldClass import My10x10GridWorld
         Q-Learning : """
 class QLearningAgent(My10x10GridWorld):
 
-    """New methods used for QLearning"""
-
-    # Todo: runs forever like this. how to show value function? now I update the value function by taking the max
-    #  value of Q(s, all a)
-
     """New methods used for Q-Learning"""
     def takeMaxAction(self, state):
 
