@@ -14,6 +14,13 @@ Implement
 - [x] SARSA
 - [x] Q-Learning
 
+ToDo: 
+- [ ] update readme
+    - [ ] include formulas and descriptions
+    - [ ] include picture of the grid world
+- [ ] make separate main which runs the specific agent simulation
+- [ ] investigate the slowliness of SARSA
+
 ToDo (optional): 
 - [ ] write tests
     - [ ] Policy Iteration
@@ -97,7 +104,8 @@ Implementing code for the simulations on [GridWorld: TD](https://cs.stanford.edu
 
 - learn state-value function for a given policy
 
-__Investigations__: _TD(0)_ converges to the __correct__ answer (value function/policy)
+__Investigations__: _TD(0)_ converges to the __correct__ answer (estimated 
+value function for a given policy)
 but not to the optimal policy!
 
 #### 3.2 __SARSA__
