@@ -84,7 +84,7 @@ class My10x10GridWorld(object):
         return len(string.replace(" ", ""))
 
     def getIndexInActionList(self, a):
-        return self.A.index(a)
+        return np.where(self.A == a)[0]
 
     def isOutOfGridOrAtWall(self, state):
         """

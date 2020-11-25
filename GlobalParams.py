@@ -3,7 +3,7 @@ import numpy as np
 
 """Define the environment"""
 # Actions
-A = ["n", "w", "s", "e"]
+A = np.array(["n", "w", "s", "e"])
 
 # Policy = random uniform
 piProbs = {A[0]: .25, A[1]: .25, A[2]: .25, A[3]: .25}

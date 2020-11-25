@@ -16,7 +16,7 @@ class SARSAAgent(My10x10GridWorld):
         eps_greedy = np.random.randn(1)
 
         # follow policy (exploit)
-        if eps_greedy > eps:
+        if eps_greedy > self.epsilon:
             policy_actions = (self.pi[state[0], state[1]]).replace(" ", "")
             policy_actions = list(policy_actions)
             policy_action = np.random.choice(policy_actions, size=1)[0]
@@ -36,22 +36,21 @@ class SARSAAgent(My10x10GridWorld):
 
         for episode in range(episodes):
 
-            print(f"episode={episode}\n{self.pi}")
-            #\n{np.round(self.Q, 2)}
-            #print(f"-- episode={episode}\n{np.round(self.Q, 2)}")
+            print(f"episode={episode}")
 
             state = self.starting_state
             a = self.takeEpsGreedyAction(state)
 
             iters = 0
 
-            while not self.isTerminalState(state):
-
-                if iters > 10000:
-                    break
+            while True:
 
                 reward = self.getRewardForAction(state)
-                state_nxt = np.array(self.getIndiceAfterAction(state, a))
+                if self.isTerminalState(state):
+                    state_nxt = self.starting_state.copy()
+                else:
+                    state_nxt = np.array(self.getIndiceAfterAction(state, a))
+
                 if self.isOutOfGridOrAtWall(state_nxt):
                     state_nxt = state.copy()
 
@@ -61,34 +60,34 @@ class SARSAAgent(My10x10GridWorld):
                 # get Q(s', a') from the table
                 Q_nxt = self.Q[self.decodeState(state_nxt), self.getIndexInActionList(a_nxt)]
                 Q_now = self.Q[self.decodeState(state), self.getIndexInActionList(a)]
+
                 # Update state-action value: Q(s, a) <- Q(s, a) + alpha*[ R + gamma*Q(s', a') - Q(s, a) ]
                 self.Q[self.decodeState(state),
                        self.getIndexInActionList(a)] = Q_now + self.Alpha * ( reward + self.Gamma*Q_nxt - Q_now )
+
+                if self.isTerminalState(state):
+                    break
 
                 a, state = a_nxt, state_nxt
 
                 iters += 1
 
-            # Todo: how to update the terminal state? since the agent doesnt take an action there.
-            state_nxt = self.starting_state
-            a_nxt = self.takeEpsGreedyAction(state_nxt)
-            Q_start = self.Q[self.decodeState(state_nxt), self.getIndexInActionList(a_nxt)]
-            Q_now = self.Q[self.decodeState(state), self.getIndexInActionList(a)]
-            self.Q[self.decodeState(state),
-                   self.getIndexInActionList(a)] = Q_now + self.Alpha * ( self.getRewardForAction(state) +
-                                                                           self.Gamma*Q_start - Q_now )
+            print(f"iters={iters}")
 
             # improve policy toward greediness wrt q_pi
-            # Todo: is the policy updated in every step of an episode or only at the end of an episode?
             self.policyImprovementByQ()
+            print(self.pi)
 
+            # (optional): update v_pi according to Q - just to compare with the REINFORCEjs results
             for r in range(self.Q.shape[0]):
                 self.v[self.states_encoded[r][0], self.states_encoded[r][1]] = np.max(self.Q[r])
             print(np.round(self.v, 2))
 
     def runSarsa(self):
 
-        self.sarsa(100)
+        self.sarsa(2)
+        self.policyImprovementByQ()
+        print(self.pi)
 
 
 """Let the agent reinforce"""

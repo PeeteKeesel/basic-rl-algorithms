@@ -12,7 +12,7 @@ Implement
 - [x] TD-0
 - [ ] TD(lambda) 
 - [x] SARSA
-- [ ] Q-Learning
+- [x] Q-Learning
 
 ToDo (optional): 
 - [ ] write tests
