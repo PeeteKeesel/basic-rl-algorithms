@@ -127,10 +127,9 @@ but not to the optimal policy!
 
 | Problem    | Goal                                                           | Examples                               |
 | ---------- |:-------------------------------------------------------------- | :------------------------------------- |
-| Prediction | __evaluate__ a given policy                                    | Iterative Policy Evaluation, TD(lambda)|
-|            | _How much reward are we going to get for a given policy?_      |                                        | 
-| Control    | find the __optimal__ policy                                    | Policy Iteration, Value Iteration,     |
-|            | _What is the most total reward we are getting out of our MDP?_ | SARSA, Q-Learning                      |
+| Prediction | __evaluate__ a given policy  <br> _How much reward are we going to get for a given policy?_  | Iterative Policy Evaluation, TD(lambda)|
+|            |       |                                        | 
+| Control    | find the __optimal__ policy  <br> _What is the most total reward we are getting out of our MDP?_ | Policy Iteration, Value Iteration, <br>SARSA, Q-Learning                      |
 
 
 __Prediction problem__: evalate a given policy  
