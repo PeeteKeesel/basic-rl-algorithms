@@ -125,15 +125,24 @@ but not to the optimal policy!
 
 ### Glossary
 
+```diff
+# Problems 
+```
+
 | Problem    | Goal                                                           | Examples                               |
-| ---------- |:-------------------------------------------------------------- | :------------------------------------- |
+| :--------- |:-------------------------------------------------------------- | :------------------------------------- |
 | Prediction | __evaluate__ a given policy  <br> _How much reward are we going to get for a given policy?_  | Iterative Policy Evaluation, TD(lambda)|
-|            |       |                                        | 
 | Control    | find the __optimal__ policy  <br> _What is the most total reward we are getting out of our MDP?_ | Policy Iteration, Value Iteration, <br>SARSA, Q-Learning                      |
 
 
-__Prediction problem__: evalate a given policy  
-__Control problem__:
+| Algorithm                   | Update Equation | Type       | Description | 
+| :-------------------------- | :---------------| :--------- | :-----------|
+| Iterative Policy Evaluation | ![img](https://latex.codecogs.com/gif.latex?https://latex.codecogs.com/gif.latex?V%28s%29%20%5Cgets%20%5Csum_%7Ba%7D%5Cpi%28a%20%7C%20s%29%5Csum_%7Bs%27%2C%20r%7Dp%28s%27%2C%20r%20%7C%20s%2C%20a%29%5Br%20&plus;%20%5Cgamma%20V%28s%27%29%5D) | Synchronous DP | evaluate a given policy <br> explicit policy  |  
+| Policy Iteration            | ![img](https://latex.codecogs.com/gif.latex?) | Synchronous DP | evaluate a given policy via _Bellmann Expectation Eq._ + update policy <br> - there is an explicit policy | 
+| Value Iteration             | ![img](https://latex.codecogs.com/gif.latex?) | Synchronous DP | evaluate a given a policy via _Bellmann Optimality Eq._ <br> - there is no explicit policy|
+| TD(lambda)                  | ![img](https://latex.codecogs.com/gif.latex?) | TD-Learning    | |
+| SARSA                       | ![img](https://latex.codecogs.com/gif.latex?) | TD-Learning    | | 
+| Q-LEARNING                  | ![img](https://latex.codecogs.com/gif.latex?) | TD-Learning    | | 
  
 _given_: MDP
      
