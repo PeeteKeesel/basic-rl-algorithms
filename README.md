@@ -15,6 +15,7 @@ Implement
 - [x] Q-Learning
 
 ToDo: 
+- [ ] include eligibility traces
 - [ ] update readme
     - [ ] include formulas and descriptions
     - [ ] include picture of the grid world
@@ -119,3 +120,25 @@ but not to the optimal policy!
 - converges to `Q_*(s, a)`
 
 ![img](https://latex.codecogs.com/gif.latex?Q%28S_t%2C%20A_t%29%20%5Cgets%20Q%28S_t%2C%20A_t%29%20&plus;%20%5Calpha%20%5B%20R_%7Bt&plus;1%7D%20&plus;%20%5Cgamma%20%5Cmax_%7Ba%7DQ%28S_%7Bt&plus;1%7D%2C%20A_%7Bt&plus;1%7D%29-%20Q%28S_t%2C%20A_t%29%20%5D)
+
+---
+
+### Glossary
+
+| Problem    | Goal                                                           | Examples                               |
+| ---------- |:-------------------------------------------------------------- | :------------------------------------- |
+| Prediction | __evaluate__ a given policy                                    | Iterative Policy Evaluation, TD(lambda)|
+|            | _How much reward are we going to get for a given policy?_      |                                        | 
+| Control    | find the __optimal__ policy                                    | Policy Iteration, Value Iteration,     |
+|            | ```diff # _What is the most total reward we are getting out of our MDP?_``` | SARSA, Q-Learning                      |
+
+
+__Prediction problem__: evalate a given policy  
+__Control problem__:
+ 
+_given_: MDP
+     
+    _goal_: find the optimal value function and therefore the optimal policy
+
+## Policy Evaluation  
+
