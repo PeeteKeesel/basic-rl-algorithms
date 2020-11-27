@@ -138,7 +138,7 @@ but not to the optimal policy!
 | Algorithm                   | Update Equation | Type       | Description | 
 | :-------------------------- | :---------------| :--------- | :-----------|
 | Iterative Policy Evaluation | ![img](https://latex.codecogs.com/gif.latex?V%28s%29%20%5Cgets%20%5Csum_%7Ba%7D%5Cpi%28a%20%7C%20s%29%5Csum_%7Bs%27%2C%20r%7Dp%28s%27%2C%20r%20%7C%20s%2C%20a%29%5Br%20&plus;%20%5Cgamma%20V%28s%27%29%5D) | Synchronous DP | evaluate a given policy <br> explicit policy  |  
-| Policy Iteration            | ![img](https://latex.codecogs.com/gif.latex?%5Clarge%20V%28s%29%20%5Cgets%20%5Csum_%7Ba%7D%5Cpi%28a%20%7C%20s%29%5Csum_%7Bs%27%2C%20r%7Dp%28s%27%2C%20r%20%7C%20s%2C%20%5Cpi%28s%29%29%5Br%20&plus;%20%5Cgamma%20V%28s%27%29%5D) | Synchronous DP | evaluate a given policy via _Bellmann Expectation Eq._ + update policy <br> - there is an explicit policy | 
+| Policy Iteration            | ![img](https://latex.codecogs.com/gif.latex?%5CLARGE%20V%28s%29%20%5Cgets%20%5Csum_%7Ba%7D%5Cpi%28a%20%7C%20s%29%5Csum_%7Bs%27%2C%20r%7Dp%28s%27%2C%20r%20%7C%20s%2C%20%5Cpi%28s%29%29%5Br%20&plus;%20%5Cgamma%20V%28s%27%29%5D) | Synchronous DP | evaluate a given policy via _Bellmann Expectation Eq._ + update policy <br> - there is an explicit policy | 
 | Value Iteration             | ![img](https://latex.codecogs.com/gif.latex?) | Synchronous DP | evaluate a given a policy via _Bellmann Optimality Eq._ <br> - there is no explicit policy|
 | TD(lambda)                  | ![img](https://latex.codecogs.com/gif.latex?) | TD-Learning    | |
 | SARSA                       | ![img](https://latex.codecogs.com/gif.latex?) | TD-Learning    | | 
