@@ -130,7 +130,7 @@ but not to the optimal policy!
 | Prediction | __evaluate__ a given policy                                    | Iterative Policy Evaluation, TD(lambda)|
 |            | _How much reward are we going to get for a given policy?_      |                                        | 
 | Control    | find the __optimal__ policy                                    | Policy Iteration, Value Iteration,     |
-|            | ```diff # _What is the most total reward we are getting out of our MDP?_``` | SARSA, Q-Learning                      |
+|            | _What is the most total reward we are getting out of our MDP?_ | SARSA, Q-Learning                      |
 
 
 __Prediction problem__: evalate a given policy  
