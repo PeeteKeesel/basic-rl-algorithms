@@ -167,9 +167,6 @@
     </task>
     <servers />
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
-  </component>
   <component name="WindowStateProjectService">
     <state width="2252" height="492" key="GridCell.Tab.0.bottom" timestamp="1606314440934">
       <screen x="1680" y="-888" width="3440" height="1415" />
@@ -219,5 +216,9 @@
       <screen x="1680" y="-888" width="3440" height="1415" />
     </state>
     <state x="2527" y="-442" width="695" height="580" key="find.popup/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1606233635813" />
+    <state x="2492" y="-564" width="670" height="676" key="search.everywhere.popup" timestamp="1606731279028">
+      <screen x="1680" y="-888" width="3440" height="1415" />
+    </state>
+    <state x="2492" y="-564" width="670" height="676" key="search.everywhere.popup/1680.-888.3440.1415/61.25.1619.1025@1680.-888.3440.1415" timestamp="1606731279028" />
   </component>
 </project>
