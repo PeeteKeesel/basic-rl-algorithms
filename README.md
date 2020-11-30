@@ -131,22 +131,22 @@ but not to the optimal policy!
 
 | Problem    | Goal                                                           | Examples                               |
 | :--------- |:-------------------------------------------------------------- | :------------------------------------- |
-| Prediction | __evaluate__ a given policy  <br> _How much reward are we going to get for a given policy?_  | Iterative Policy Evaluation, TD(lambda)|
-| Control    | find the __optimal__ policy  <br> _What is the most total reward we are getting out of our MDP?_ | Policy Iteration, Value Iteration, <br>SARSA, Q-Learning                      |
+| Prediction | __evaluate__ a given policy  <br> _How much reward are we going to get for a given policy?_  | Iterative Policy Evaluation, TD(lambda) <br> First-Visit MC, Every-Visit MC|
+| Control    | find the __optimal__ policy  <br> _What is the most total reward we are getting out of our MDP?_ | Policy Iteration, Value Iteration, <br>SARSA, Q-Learning, <br> MC Exploring Starts, On-Policy first-visit MC control                |
 
+```diff
+# Algorithms 
+```
 
 | Algorithm                   | Update Equation | Type       | Description | 
 | :-------------------------- | :---------------| :--------- | :-----------|
 | Iterative Policy Evaluation | ![img](https://latex.codecogs.com/gif.latex?V%28s%29%20%5Cgets%20%5Csum_%7Ba%7D%5Cpi%28a%20%7C%20s%29%5Csum_%7Bs%27%2C%20r%7Dp%28s%27%2C%20r%20%7C%20s%2C%20a%29%5Br%20&plus;%20%5Cgamma%20V%28s%27%29%5D) | Synchronous DP | evaluate a given policy <br> explicit policy  |  
 | Policy Iteration            | 1. Policy Evaluation ![img](https://latex.codecogs.com/gif.latex?V%28s%29%20%5Cgets%20%5Csum_%7Ba%7D%5Cpi%28a%20%7C%20s%29%5Csum_%7Bs%27%2C%20r%7Dp%28s%27%2C%20r%20%7C%20s%2C%20%5Cpi%28s%29%29%5Br%20&plus;%20%5Cgamma%20V%28s%27%29%5D) <br> 2. Policy Improvement <br> ![img](https://latex.codecogs.com/gif.latex?%5Cpi%28s%29%20%5Cgets%20%5Cmax_%7Ba%7D%20%5Csum_%7Bs%27%2C%20r%7D%20p%28s%27%2C%20r%20%7C%20s%2C%20a%29%20%5Br%20&plus;%20%5Cgamma%20V%28s%27%29%5D) | Synchronous DP | evaluate a given policy via _Bellmann Expectation Eq._ + update policy <br> - there is an explicit policy | 
 | Value Iteration             | ![img](https://latex.codecogs.com/gif.latex?V%28s%29%20%5Cgets%20%5Cmax_a%20%5Csum_%7Bs%27%2C%20r%7D%20p%28s%27%2C%20r%20%7C%20s%2C%20a%29%20%5Br%20&plus;%20%5Cgamma%20V%28s%27%29%5D) | Synchronous DP | evaluate a given a policy via _Bellmann Optimality Eq._ <br> - there is no explicit policy|
-| TD(lambda)                  | ![img](https://latex.codecogs.com/gif.latex?) | TD-Learning    | |
-| SARSA                       | ![img](https://latex.codecogs.com/gif.latex?) | TD-Learning    | | 
-| Q-LEARNING                  | ![img](https://latex.codecogs.com/gif.latex?) | TD-Learning    | | 
+| First-Visit-MC              | ![img](https://latex.codecogs.com/gif.latex?) | MC-Learning    | estimates `v(s)` as the average of the returns following first-visits to `s` |
+| Every-Visit-MC              | ![img](https://latex.codecogs.com/gif.latex?) | MC-Learning    | estimates `v(s)` as the average of the returns following every-visits to `s` |
+| TD(0)                  | ![img](https://latex.codecogs.com/gif.latex?) | TD-Learning    | |
+| n-step TD                  | ![img](https://latex.codecogs.com/gif.latex?) | TD-Learning    | |
+| SARSA                       | ![img](https://latex.codecogs.com/gif.latex?Q%28S_t%2C%20A_t%29%20%5Cgets%20Q%28S_t%2C%20A_t%29%20&plus;%20%5Calpha%20%5B%20R_%7Bt&plus;1%7D%20&plus;%20%5Cgamma%20Q%28S_%7Bt&plus;1%7D%2C%20A_%7Bt&plus;1%7D%29-%20Q%28S_t%2C%20A_t%29%20%5D) | TD-Learning    | performs on-policy updates; <br> estimate `q_pi` following `pi` + update `pi` | 
+| Q-Learning                  | ![img](https://latex.codecogs.com/gif.latex?Q%28S_t%2C%20A_t%29%20%5Cgets%20Q%28S_t%2C%20A_t%29%20&plus;%20%5Calpha%20%5B%20R_%7Bt&plus;1%7D%20&plus;%20%5Cgamma%20%5Cmax_%7Ba%7D%20Q%28S_%7Bt&plus;1%7D%2C%20a%29-%20Q%28S_t%2C%20A_t%29%20%5D) | TD-Learning    | performs off-policy updates (approx. `q*` ind. of policy) <br> estimate `q_pi` following optimal actions | 
  
-_given_: MDP
-     
-    _goal_: find the optimal value function and therefore the optimal policy
-
-## Policy Evaluation  
-
