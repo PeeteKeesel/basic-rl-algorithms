@@ -1,6 +1,6 @@
-# KaparthyReinforceJSRedo
+# Basic RL Algorithms
 
-Rewriting the code from [.../reinforcejs/gridworld_dp.html](https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_dp.html). 
+Writing code to obtain the results of the simulations in [.../reinforcejs/gridworld_dp.html](https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_dp.html). 
 Formulas are decoded from [here](https://www.codecogs.com/latex/eqneditor.php).
 
 Implement
