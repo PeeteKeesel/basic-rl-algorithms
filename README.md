@@ -6,6 +6,7 @@ Writing code to obtain the results of the simulations from Kaparthy's [.../reinf
 
 - [:robot: Basic RL Algorithms](#robot-basic-rl-algorithms)
   - [:books: Table of Contents](#books-table-of-contents)
+  - [:triangular\_ruler: Description of the Mathematical Components](#triangular_ruler-description-of-the-mathematical-components)
   - [:tractor: Dynamic Programming](#tractor-dynamic-programming)
     - [Policy Iteration](#policy-iteration)
     - [Value Iteration](#value-iteration)
@@ -20,6 +21,21 @@ Writing code to obtain the results of the simulations from Kaparthy's [.../reinf
     - [Algorithms](#algorithms)
   - [:calendar: ToDo](#calendar-todo)
 
+## :triangular_ruler: Description of the Mathematical Components
+
+| Component | Description |
+| --------- | ----------- |
+| $S$ | State in the enviroment |
+| $A$ | Action of a policy |
+| $Q(S,A)$ | Estimated value of taking action $A$ in state $S$ |
+| $Q(S_{t+1},A_{t+1})$ | Estimated value of taking the next action $A_{t+1}$ in the next state $S_{t+1}$ under the current policy $\pi$ |
+| $\pi$ | Policy |
+| $\pi(A_{t+1} \| S_{t+1})$ | Probability of selecting action $A_{t+1}$ in state $S_{t+1}$ under the current policy $\pi$ |
+| $R_t$ | Immediate reward received from taking action $A$ in state $S$ |
+| $R_{t+1}$ | Received reward after taking action $A_{t+1}$ in state $S_{t+1}$ |
+| $\alpha$ | Learning rate |
+| $\gamma$ | Discount factor |
+| $\sum_a$ | Sum over all possible actions $A$ in state $S$ |
 
 ## :tractor: Dynamic Programming
 
