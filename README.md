@@ -1,10 +1,146 @@
-# Basic RL Algorithms
+# :robot: Basic RL Algorithms
 
-Writing code to obtain the results of the simulations in [.../reinforcejs/gridworld_dp.html](https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_dp.html). 
-Formulas are decoded from [here](https://www.codecogs.com/latex/eqneditor.php).
+Writing code to obtain the results of the simulations from Kaparthy's [.../reinforcejs/gridworld_dp.html](https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_dp.html). 
 
-Implement
+## Table of Contents
 
+- [:robot: Basic RL Algorithms](#robot-basic-rl-algorithms)
+  - [Table of Contents](#table-of-contents)
+  - [:tractor: Dynamic Programming](#tractor-dynamic-programming)
+    - [Policy Iteration](#policy-iteration)
+    - [Value Iteration](#value-iteration)
+  - [:blue\_car: Monte Carlo](#blue_car-monte-carlo)
+  - [:railway\_car: Temporal Difference (TD) Learning](#railway_car-temporal-difference-td-learning)
+    - [TD(0)](#td0)
+    - [SARSA](#sarsa)
+    - [Q-Learning](#q-learning)
+  - [:dart: Summaries](#dart-summaries)
+    - [Problems](#problems)
+    - [Algorithms](#algorithms)
+  - [:calendar: Check-List](#calendar-check-list)
+  - [:calendar: ToDo](#calendar-todo)
+
+
+## :tractor: Dynamic Programming
+
+$$
+    V(S_t) \leftarrow \mathbb{E}_{\pi} [ r_{t+1} + \gamma V(S_t) ]
+$$
+
+Implementing code for the simulations on [GridWorld: DP](https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_dp.html)
+
+### Policy Iteration
+
+- converges to $v_*(s)$
+
+<u>Steps</u>: Iteratively
+
+1. Getting $v_i$ by doing _Policy Evaluation_ of policy $\pi_{i-1}$ using $v_{i-1}$.
+
+2. Updating the policy to $\pi_i$ by doing _Policy Improvement_ using $v_i$.
+
+### Value Iteration
+
+- converges to $v_*(s)$
+
+<u>Steps</u>:
+
+1. Finding the _optimal value function_ $v_*$ using only the action which leads to the successor state with maximal value.
+
+2. One update of the policy using the optimal found policy from 1.
+    
+<u>Investigations</u>: Doing iteratively first policy evaluation followed by policy improvement and then using that improvement policy in the next evaluation step leads to the same value function for each iteration as in value iteration. I.e. Directly updating the policy and then evaluation leads to the same as always only taking the action which leads to the successor state with maximal value.
+
+## :blue_car: Monte Carlo
+
+$$
+V(S_t) \leftarrow V(S_t) + \alpha [ R_t -V(S_t) ]
+$$
+
+- learn state-value function for a given policy
+- update only when end of episode is reached
+- converges to $v_{\pi}(s)$ as the number of visits to $s$ goes to infinity
+- only sample experience is available, no complete probability 
+distributions of all possible transitions are required
+
+<u>Idea</u>: Estimate the value of a state by experience by _averaging the returns observed after 
+visiting that state_. As more returns are observed, the average should converge to the 
+expected value.
+
+- <u>visit</u> to $s$ = each occurence of state $s$ in an episode.
+
+- <u>First-visit MC method</u> = estimates  $v_{\pi}(s)$ as the average of the returns following
+first visits to $s$.    
+
+- <u>Every-visit MC method</u> = estimates  $v_{\pi}(s)$ as the average of the returns following
+all visits to $s$.    
+
+## :railway_car: Temporal Difference (TD) Learning
+
+- update online, after each step
+
+Implementing code for the simulations on [GridWorld: TD](https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_td.html)
+
+### TD(0)
+
+- converges to $v_{\pi}(s)$
+
+$$
+    V(S_t) \leftarrow V(S_t) + \alpha \left[ r_{t+1} + \gamma V(S_{t+1}) - V(S_t) \right]
+$$
+
+- learn state-value function for a given policy
+
+<u>Investigations</u>: _TD(0)_ converges to the __correct__ answer (estimated value function for a given policy) but not to the optimal policy!
+
+### SARSA
+
+- converges to $Q_*(s, a)$
+
+$$
+    Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [ R_{t+1} + \gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t) ] 
+$$
+
+### Q-Learning
+
+- converges to $Q_*(s, a)$
+
+$$
+    Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [ R_{t+1} + \gamma \max_a Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t) ] 
+$$
+
+
+---
+
+## :dart: Summaries
+
+### Problems
+
+| Problem    | Goal                                                           | Examples                               |
+| :--------- |:-------------------------------------------------------------- | :------------------------------------- |
+| Prediction | __evaluate__ a given policy  <br> _How much reward are we going to get for a given policy?_  | Iterative Policy Evaluation, TD(lambda) <br> First-Visit MC, Every-Visit MC|
+| Control    | find the __optimal__ policy  <br> _What is the most total reward we are getting out of our MDP?_ | Policy Iteration, Value Iteration, <br>SARSA, Q-Learning, <br> MC Exploring Starts, On-Policy first-visit MC control                |
+
+### Algorithms 
+
+| Algorithm                   | Update Equation | Type       | Description | 
+| :-------------------------- | :---------------| :--------- | :-----------|
+| Iterative Policy Evaluation | $V(s) \leftarrow \sum_a \pi(a \| s) \sum_{s', r} p(s', r \| s, a) [ r + \gamma V(s') ]$ | Synchronous DP | evaluate a given $\pi$ <br> - there is an explicit policy  |  
+| Policy Iteration            | 1. Policy Evaluation <br> $V(s) \leftarrow \sum_a \pi(a \| s) \sum_{s', r} p(s', r \| s, \pi(s)) [ r + \gamma V(s') ]$ <br> 2. Policy Improvement <br> $\pi{s} \leftarrow \max_a \sum_{s', r} p(s', r \| s, a)[ r + \gamma V(s') ]$ | Synchronous DP | evaluate a given $\pi$ via _Bellmann Expectation Eq._ + update $\pi$ <br> - there is an explicit policy | 
+| Value Iteration             |  $V(s) \leftarrow \max_a \sum_{s', r} p(s', r \| s, a)[ r + \gamma V(s') ]$ | Synchronous DP | evaluate a given a $\pi$ via _Bellmann Optimality Eq._ <br> - there is no explicit policy|
+| First-Visit-MC              | ... | MC-Learning    | estimates $v(s)$ as the average of the returns following first-visits to $s$ |`
+| Every-Visit-MC              | ... | MC-Learning    | estimates $v(s)$ as the average of the returns following every-visits to $s$ |
+| TD(0)                       | $V(S_t) \leftarrow V(S_t) + \alpha \left[ r_{t+1} + \gamma V(S_{t+1}) - V(S_t) \right]$ | TD-Learning    | |
+| n-step TD                   | ... | TD-Learning    | |
+| SARSA                       | $Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [ R_{t+1} + \gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t) ]$ | TD-Learning    | estimate $q_{\pi}$ following $\pi$ + update $\pi$ <br> - performs on-policy updates <br> - randomly select $A_{t+1}$  | 
+| Q-Learning                  | $Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [ R_{t+1} + \gamma \max_a Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t) ]$ | TD-Learning    | estimate $q_{\pi}$ following optimal next state-actions <br> - performs off-policy updates (approx. $q^*$ ind. of policy) <br> - select $\argmax_a Q(S_{t+1}, A_{t+1})$ | 
+| Expected SARSA              | $Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [ R_{t+1} + \gamma \mathbb{E}_{\pi}[ Q(S_{t+1}, A_{t+1}) \| S_{t+1} ] - Q(S_t, A_t) ]$ <br> $Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [ R_{t+1} + \gamma \sum_a \pi(a \| S_{t+1}) Q(S_{t+1}, a) - Q(S_t, A_t) ]$ | TD-Learning    | estimate $q_{\pi}$ using expected value of next state-actions <br> -performs off-policy updates <br> - randomly select $A_{t+1}$ <br> - moves _deterministically_ in same direction as SARSA moves in _expectation_ |
+
+## :calendar: Check-List
+
+
+
+## :calendar: ToDo
 - [x] Policy Iteration
 - [x] Value Iteration 
 - [x] First-Visit Monte Carlo
@@ -13,141 +149,18 @@ Implement
 - [ ] TD(lambda) 
 - [x] SARSA
 - [x] Q-Learning
+- [ ] Include eligibility traces
+- [x] Update readme
+  - [x] include formulas and descriptions
+- [ ] Include picture of the grid world
+- [ ] Make separate main which runs the specific agent simulation
+- [ ] Investigate the slowliness of SARSA
 
-ToDo: 
-- [ ] include eligibility traces
-- [ ] update readme
-    - [ ] include formulas and descriptions
-    - [ ] include picture of the grid world
-- [ ] make separate main which runs the specific agent simulation
-- [ ] investigate the slowliness of SARSA
-
-ToDo (optional): 
-- [ ] write tests
+<u>Optional</u>
+- [ ] Write unit-tests
     - [ ] Policy Iteration
     - [ ] Value Iteration
     - [ ] First- and Every-Visit Monte-Carlo
     - [ ] TD-0
     - [ ] SARSA
     - [ ] Q-Learning
-    
-
-### 1. Dynamic Programming: Implement Policy Iteration and Value Iteration.
-
-![img](https://latex.codecogs.com/gif.latex?V%28S_t%29%20%5Cgets%20%5Cmathbb%7BE%7D_%7B%5Cpi%7D%5Br_%7Bt&plus;1%7D%20&plus;%20%5Cgamma%20V%28S_%7Bt%7D%29%5D)
-
-Implementing code for the simulations on [GridWorld: DP](https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_dp.html)
-
-#### 1.1 __Policy Iteration__: 
-
-- converges to `v_*(s)`
-
-Iteratively doing 
-
-1. Getting ![img](http://latex.codecogs.com/svg.latex?v_i) by doing _Policy Evaluation_ of policy 
-![img](http://latex.codecogs.com/svg.latex?%5Cpi_%7Bi-1%7D)
- using ![img](http://latex.codecogs.com/svg.latex?v_%7Bi-1%7D)
-followed by 
-
-2. Updating the policy to 
-![img](http://latex.codecogs.com/svg.latex?%5Cpi_i) by doing _Policy Improvement_ using 
-![img](http://latex.codecogs.com/svg.latex?v_i)
-
-#### 1.2 __Value Iteration__:
-
-- converges to `v_*(s)`
-
-1. Finding the _optimal value function_ 
-![img](http://latex.codecogs.com/svg.latex?v_%2A) using only 
-the action which leads to the successor state with maximal value followed by 
-
-2. One update of the policy using the optimal found policy from 1.
-    
-__Investigations__: Doing iteratively first policy evaluation followed by policy improvement
-and then using that improvement policy in the next evaluation step leads to the same
-value function for each iteration as in value iteration. I.e. Directly updating the policy 
-and then evaluation leads to the same as always only taking the action which leads to
-the successor state with maximal value.
-
-### 2. Monte Carlo
-
-![img](https://latex.codecogs.com/gif.latex?V%28S_t%29%20%5Cgets%20V%28S_t%29%20&plus;%20%5Calpha%5BR_%7Bt%7D%20-%20V%28S_t%29%5D)
-
-- learn state-value function for a given policy
-- update only when end of episode is reached
-- converges to `v_pi(s)` as the number of visits to `s` goes to infinity
-- only sample experience is available, no complete probability 
-distributions of all possible transitions are required
-
-__Idea__: Estimate the value of a state by experience by _averaging the returns observed after 
-visiting that state_. As more returns are observed, the average should converge to the 
-expected value.
-
-__visit__ to `s` = each occurence of state `s` in an episode.
-
-__First-visit MC method__ = estimates `v_pi(s)` as the average of the returns following
-first visits to `s`.    
-
-__Every-visit MC method__ = estimates `v_pi(s)` as the average of the returns following
-all visits to `s`.    
-
-### 3. Temporal Difference Learning
-
-- update online, after each step
-
-Implementing code for the simulations on [GridWorld: TD](https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_td.html)
-
-#### 3.1 __TD(0)__
-
-- converges to `v_pi(s)`
-
-![img](https://latex.codecogs.com/gif.latex?V%28S_t%29%20%5Cgets%20V%28S_t%29%20&plus;%20%5Calpha%5Br_%7Bt&plus;1%7D%20&plus;%20%5Cgamma%20V%28S_%7Bt&plus;1%7D%29%20-%20V%28S_t%29%5D)
-
-- learn state-value function for a given policy
-
-__Investigations__: _TD(0)_ converges to the __correct__ answer (estimated 
-value function for a given policy)
-but not to the optimal policy!
-
-#### 3.2 __SARSA__
-
-- converges to `Q_*(s, a)`
-
-![img](https://latex.codecogs.com/gif.latex?Q%28S_t%2C%20A_t%29%20%5Cgets%20Q%28S_t%2C%20A_t%29%20&plus;%20%5Calpha%20%5B%20R_%7Bt&plus;1%7D%20&plus;%20%5Cgamma%20Q%28S_%7Bt&plus;1%7D%2C%20A_%7Bt&plus;1%7D%29-%20Q%28S_t%2C%20A_t%29%20%5D)
-
-#### 3.3 __Q-Learning__
-
-- converges to `Q_*(s, a)`
-
-![img](https://latex.codecogs.com/gif.latex?Q%28S_t%2C%20A_t%29%20%5Cgets%20Q%28S_t%2C%20A_t%29%20&plus;%20%5Calpha%20%5B%20R_%7Bt&plus;1%7D%20&plus;%20%5Cgamma%20%5Cmax_%7Ba%7DQ%28S_%7Bt&plus;1%7D%2C%20A_%7Bt&plus;1%7D%29-%20Q%28S_t%2C%20A_t%29%20%5D)
-
----
-
-### Glossary
-
-```diff
-# Problems 
-```
-
-| Problem    | Goal                                                           | Examples                               |
-| :--------- |:-------------------------------------------------------------- | :------------------------------------- |
-| Prediction | __evaluate__ a given policy  <br> _How much reward are we going to get for a given policy?_  | Iterative Policy Evaluation, TD(lambda) <br> First-Visit MC, Every-Visit MC|
-| Control    | find the __optimal__ policy  <br> _What is the most total reward we are getting out of our MDP?_ | Policy Iteration, Value Iteration, <br>SARSA, Q-Learning, <br> MC Exploring Starts, On-Policy first-visit MC control                |
-
-```diff
-# Algorithms 
-```
-
-| Algorithm                   | Update Equation | Type       | Description | 
-| :-------------------------- | :---------------| :--------- | :-----------|
-| Iterative Policy Evaluation | ![img](https://latex.codecogs.com/gif.latex?V%28s%29%20%5Cgets%20%5Csum_%7Ba%7D%5Cpi%28a%20%7C%20s%29%5Csum_%7Bs%27%2C%20r%7Dp%28s%27%2C%20r%20%7C%20s%2C%20a%29%5Br%20&plus;%20%5Cgamma%20V%28s%27%29%5D) | Synchronous DP | evaluate a given `pi <br> - there is an explicit policy  |  
-| Policy Iteration            | 1. Policy Evaluation ![img](https://latex.codecogs.com/gif.latex?V%28s%29%20%5Cgets%20%5Csum_%7Ba%7D%5Cpi%28a%20%7C%20s%29%5Csum_%7Bs%27%2C%20r%7Dp%28s%27%2C%20r%20%7C%20s%2C%20%5Cpi%28s%29%29%5Br%20&plus;%20%5Cgamma%20V%28s%27%29%5D) <br> 2. Policy Improvement <br> ![img](https://latex.codecogs.com/gif.latex?%5Cpi%28s%29%20%5Cgets%20%5Cmax_%7Ba%7D%20%5Csum_%7Bs%27%2C%20r%7D%20p%28s%27%2C%20r%20%7C%20s%2C%20a%29%20%5Br%20&plus;%20%5Cgamma%20V%28s%27%29%5D) | Synchronous DP | evaluate a given `pi` via _Bellmann Expectation Eq._ + update `pi` <br> - there is an explicit policy | 
-| Value Iteration             | ![img](https://latex.codecogs.com/gif.latex?V%28s%29%20%5Cgets%20%5Cmax_a%20%5Csum_%7Bs%27%2C%20r%7D%20p%28s%27%2C%20r%20%7C%20s%2C%20a%29%20%5Br%20&plus;%20%5Cgamma%20V%28s%27%29%5D) | Synchronous DP | evaluate a given a `pi` via _Bellmann Optimality Eq._ <br> - there is no explicit policy|
-| First-Visit-MC              | ... | MC-Learning    | estimates `v(s)` as the average of the returns following first-visits to `s` |`
-| Every-Visit-MC              | ... | MC-Learning    | estimates `v(s)` as the average of the returns following every-visits to `s` |
-| TD(0)                       | ... | TD-Learning    | |
-| n-step TD                   | ... | TD-Learning    | |
-| SARSA                       | ![img](https://latex.codecogs.com/gif.latex?Q%28S_t%2C%20A_t%29%20%5Cgets%20Q%28S_t%2C%20A_t%29%20&plus;%20%5Calpha%20%5B%20R_%7Bt&plus;1%7D%20&plus;%20%5Cgamma%20Q%28S_%7Bt&plus;1%7D%2C%20A_%7Bt&plus;1%7D%29-%20Q%28S_t%2C%20A_t%29%20%5D) | TD-Learning    | estimate `q_pi` following `pi` + update `pi` <br> - performs on-policy updates <br> - randomly select `A_{t+1}`  | 
-| Q-Learning                  | ![img](https://latex.codecogs.com/gif.latex?Q%28S_t%2C%20A_t%29%20%5Cgets%20Q%28S_t%2C%20A_t%29%20&plus;%20%5Calpha%20%5B%20R_%7Bt&plus;1%7D%20&plus;%20%5Cgamma%20%5Cmax_%7Ba%7D%20Q%28S_%7Bt&plus;1%7D%2C%20a%29-%20Q%28S_t%2C%20A_t%29%20%5D) | TD-Learning    | estimate `q_pi` following optimal next state-actions <br> - performs off-policy updates (approx. `q*` ind. of policy) <br> - select `argmax_a Q(S_{t+1}, A_{t+1})` | 
-| Expected SARSA              | ![img](https://latex.codecogs.com/gif.latex?Q%28S_t%2C%20A_t%29%20%5Cgets%20Q%28S_t%2C%20A_t%29%20&plus;%20%5Calpha%20%5B%20R_%7Bt&plus;1%7D%20&plus;%20%5Cgamma%20%5Cmathbb%7BE%7D_%7B%5Cpi%7D%5B%20Q%28S_%7Bt&plus;1%7D%2C%20A_%7Bt&plus;1%7D%29%20%7C%20S_%7Bt&plus;1%7D%20%5D-%20Q%28S_t%2C%20A_t%29%20%5D) <br> ![img](https://latex.codecogs.com/gif.latex?Q%28S_t%2C%20A_t%29%20%5Cgets%20Q%28S_t%2C%20A_t%29%20&plus;%20%5Calpha%20%5B%20R_%7Bt&plus;1%7D%20&plus;%20%5Cgamma%20%5Csum_%7Ba%7D%5Cpi%28a%20%7C%20S_%7Bt&plus;1%7D%29%20Q%28S_%7Bt&plus;1%7D%2C%20a%29%20-%20Q%28S_t%2C%20A_t%29%20%5D%29) | TD-Learning    | estimate `q_pi` using expected value of next state-actions <br> -performs off-policy updates <br> - randomly select `A_{t+1}` <br> - moves _deterministically_ in same direction as SARSA moves in _expectation_ |
-
