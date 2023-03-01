@@ -2,10 +2,10 @@
 
 Writing code to obtain the results of the simulations from Kaparthy's [.../reinforcejs/gridworld_dp.html](https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_dp.html). 
 
-## Table of Contents
+## :books: Table of Contents
 
 - [:robot: Basic RL Algorithms](#robot-basic-rl-algorithms)
-  - [Table of Contents](#table-of-contents)
+  - [:books: Table of Contents](#books-table-of-contents)
   - [:tractor: Dynamic Programming](#tractor-dynamic-programming)
     - [Policy Iteration](#policy-iteration)
     - [Value Iteration](#value-iteration)
@@ -13,11 +13,11 @@ Writing code to obtain the results of the simulations from Kaparthy's [.../reinf
   - [:railway\_car: Temporal Difference (TD) Learning](#railway_car-temporal-difference-td-learning)
     - [TD(0)](#td0)
     - [SARSA](#sarsa)
+    - [Expected SARSA](#expected-sarsa)
     - [Q-Learning](#q-learning)
   - [:dart: Summaries](#dart-summaries)
     - [Problems](#problems)
     - [Algorithms](#algorithms)
-  - [:calendar: Check-List](#calendar-check-list)
   - [:calendar: ToDo](#calendar-todo)
 
 
@@ -94,12 +94,23 @@ $$
 <u>Investigations</u>: _TD(0)_ converges to the __correct__ answer (estimated value function for a given policy) but not to the optimal policy!
 
 ### SARSA
-
+- used to estimate optimal action-value function $Q_*(s, a)$
 - converges to $Q_*(s, a)$
 
 $$
-    Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [ R_{t+1} + \gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t) ] 
+  Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [ R_{t+1} + \gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t) ] 
 $$
+
+### Expected SARSA 
+- used to estimate optimal action-value function $Q_*(s, a)$
+- converges to $Q_*(s, a)$
+
+$$
+  Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [ R_{t+1} + \gamma \sum_a \pi(A_{t+1} | S_{t+1}) Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t) ]
+$$
+
+- similar to SARSA
+- but takes expected value over all possible actions $a$ instead of using the actual next action to estimate the next state-action value
 
 ### Q-Learning
 
@@ -121,7 +132,7 @@ $$
 | Prediction | __evaluate__ a given policy  <br> _How much reward are we going to get for a given policy?_  | Iterative Policy Evaluation, TD(lambda) <br> First-Visit MC, Every-Visit MC|
 | Control    | find the __optimal__ policy  <br> _What is the most total reward we are getting out of our MDP?_ | Policy Iteration, Value Iteration, <br>SARSA, Q-Learning, <br> MC Exploring Starts, On-Policy first-visit MC control                |
 
-### Algorithms 
+### Algorithms
 
 | Algorithm                   | Update Equation | Type       | Description | 
 | :-------------------------- | :---------------| :--------- | :-----------|
@@ -133,12 +144,8 @@ $$
 | TD(0)                       | $V(S_t) \leftarrow V(S_t) + \alpha \left[ r_{t+1} + \gamma V(S_{t+1}) - V(S_t) \right]$ | TD-Learning    | |
 | n-step TD                   | ... | TD-Learning    | |
 | SARSA                       | $Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [ R_{t+1} + \gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t) ]$ | TD-Learning    | estimate $q_{\pi}$ following $\pi$ + update $\pi$ <br> - performs on-policy updates <br> - randomly select $A_{t+1}$  | 
-| Q-Learning                  | $Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [ R_{t+1} + \gamma \max_a Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t) ]$ | TD-Learning    | estimate $q_{\pi}$ following optimal next state-actions <br> - performs off-policy updates (approx. $q^*$ ind. of policy) <br> - select $\argmax_a Q(S_{t+1}, A_{t+1})$ | 
-| Expected SARSA              | $Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [ R_{t+1} + \gamma \mathbb{E}_{\pi}[ Q(S_{t+1}, A_{t+1}) \| S_{t+1} ] - Q(S_t, A_t) ]$ <br> $Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [ R_{t+1} + \gamma \sum_a \pi(a \| S_{t+1}) Q(S_{t+1}, a) - Q(S_t, A_t) ]$ | TD-Learning    | estimate $q_{\pi}$ using expected value of next state-actions <br> -performs off-policy updates <br> - randomly select $A_{t+1}$ <br> - moves _deterministically_ in same direction as SARSA moves in _expectation_ |
-
-## :calendar: Check-List
-
-
+| Q-Learning                  | $Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [ R_{t+1} + \gamma \max_a Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t) ]$ | TD-Learning    | estimate $q_{\pi}$ following optimal next state-actions <br> - performs off-policy updates (approx. $q^*$ ind. of policy) <br> - select $argmax_a Q(S_{t+1}, A_{t+1})$ | 
+| Expected SARSA              | $Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [ R_{t+1} + \gamma \sum_a \pi(a \| S_{t+1}) Q(S_{t+1}, a) - Q(S_t, A_t) ]$ | TD-Learning    | estimate $q_{\pi}$ using expected value of next state-actions <br> - performs off-policy updates <br> - randomly select $A_{t+1}$ <br> - moves _deterministically_ in same direction as SARSA moves in _expectation_ |
 
 ## :calendar: ToDo
 - [x] Policy Iteration
