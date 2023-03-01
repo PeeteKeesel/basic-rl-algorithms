@@ -29,7 +29,7 @@ Writing code to obtain the results of the simulations from Kaparthy's [.../reinf
 | $A$ | Action of a policy |
 | $Q(S,A)$ | Estimated value of taking action $A$ in state $S$ |
 | $Q(S_{t+1},A_{t+1})$ | Estimated value of taking the next action $A_{t+1}$ in the next state $S_{t+1}$ under the current policy $\pi$ |
-| $\pi$ | Policy of an agent, which maps states $S$ to actions $A$ |
+| $\pi$ | Policy of the RL agent, which maps states $S$ to actions $A$ |
 | $\pi(A_{t+1} \| S_{t+1})$ | Probability of selecting action $A_{t+1}$ in state $S_{t+1}$ under the current policy $\pi$ |
 | $R_t$ | Immediate reward received from taking action $A$ in state $S$ |
 | $R_{t+1}$ | Received reward after taking action $A_{t+1}$ in state $S_{t+1}$ |
